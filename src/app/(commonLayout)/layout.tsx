@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import "./globals.css";
 
 export const metadata: Metadata = {
   title: "ClickMart",
   description: "Welcome to ClickMart Online Store",
 };
 
-export default function RootLayout({
+export default function CommonLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
