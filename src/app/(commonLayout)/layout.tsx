@@ -1,3 +1,4 @@
+import Navbar from "@/components/shared/Navbar";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -12,7 +13,10 @@ export default function CommonLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`antialiased`}>{children}</body>
+      <body className={`antialiased`}>
+        <Navbar />
+        {children}
+      </body>
     </html>
   );
 }
