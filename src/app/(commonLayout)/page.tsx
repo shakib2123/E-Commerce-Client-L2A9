@@ -54,7 +54,7 @@ const HomePage = () => {
               // onChange={(e) => setSearchValue(e.target.value)}
             />
             <Tooltip content="Reset Filters">
-              <button className="p-3 text-gray-800 rounded-xl bg-gray-100">
+              <button className="p-3 text-gray-700 rounded-xl bg-gray-100">
                 <FaArrowRotateLeft className="text-2xl" />
               </button>
             </Tooltip>

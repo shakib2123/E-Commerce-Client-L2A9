@@ -70,15 +70,15 @@ export default function Navbar() {
             Home
           </Link>
           <Link
-            href="/about-us"
+            href="/shop"
             aria-current="page"
             className={
-              pathname === "/about-us"
+              pathname === "/shop"
                 ? "text-white border-b-2 font-medium border-white duration-100 transition-colors hover:text-gray-200/90"
                 : "text-gray-200 hover:text-gray-200/90"
             }
           >
-            About Us
+            Shop
           </Link>
         </ul>
       </NavbarContent>
@@ -134,16 +134,12 @@ export default function Navbar() {
           </NavbarMenuItem>
 
           <NavbarMenuItem>
-            <Link
-              href="/about-us"
-              aria-current="page"
-              className="w-full h-full"
-            >
+            <Link href="/shop" aria-current="page" className="w-full h-full">
               <Button
-                color={pathname === "/about-us" ? "primary" : "default"}
+                color={pathname === "/shop" ? "primary" : "default"}
                 className="w-full h-full"
               >
-                About Us
+                Shop
               </Button>
             </Link>
           </NavbarMenuItem>

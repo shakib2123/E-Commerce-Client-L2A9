@@ -45,9 +45,6 @@ export default function NavbarDropdown() {
         aria-label="Static Actions"
         className="text-gray-900 hover:text-gray-700"
       >
-        <DropdownItem href={`/profile`} className="w-full">
-          Profile
-        </DropdownItem>
         <DropdownItem href={`/${userRole}/dashboard`} className="w-full">
           Dashboard
         </DropdownItem>
