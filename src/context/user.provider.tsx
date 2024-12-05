@@ -9,7 +9,12 @@ import {
 } from "react";
 import { getCurrentUser } from "@/services/AuthService";
 
-type TDecodedUser = { _id: string; name: string; email: string; role: string };
+export type TDecodedUser = {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+};
 
 interface IUserProvidersValues {
   user: TDecodedUser | null;

@@ -23,6 +23,8 @@ export default function NavbarDropdown() {
 
   const user = userData?.data || {};
 
+  console.log(user);
+
   const { setIsLoading: userLoading } = useUser();
 
   const handleLogout = () => {
@@ -34,7 +36,15 @@ export default function NavbarDropdown() {
     }
   };
 
-  const userRole = user?.role === "USER" ? "user" : "admin";
+  let userRole;
+
+  if (user?.role === "VENDOR") {
+    userRole = "vendor";
+  } else if (user?.role === "USER") {
+    userRole = "user";
+  } else if (user?.role === "ADMIN") {
+    userRole = "admin";
+  }
 
   return (
     <Dropdown>

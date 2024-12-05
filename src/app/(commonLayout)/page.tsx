@@ -14,27 +14,29 @@ const HomePage = () => {
   return (
     <section className="max-w-screen-xl mx-auto px-3">
       <ScrollToTopButton />
-      <div className="my-4 bg-orange-100 p-2 rounded-lg">
-        <div className="flex flex-col md:flex-row items-center gap-4 w-full">
-          <Input
-            name="search"
-            size="sm"
-            variant="faded"
-            label="Search"
-            className="text-gray-800 md:w-[70%]"
-            onChange={(e) => setSearchValue(e.target.value)}
-          />
+      <div className="my-4 bg-primary-100 p-2 rounded-lg">
+        <div className="flex flex-col lg:flex-row items-center gap-4 w-full">
+          <div className="flex items-center gap-4 w-full">
+            <Input
+              name="search"
+              size="sm"
+              variant="faded"
+              label="Search"
+              className="text-gray-800 lg:w-[70%]"
+              onChange={(e) => setSearchValue(e.target.value)}
+            />
 
-          <Select
-            onChange={(e) => setFilterValue(e.target.value)}
-            label="Filter by"
-            size="sm"
-            variant="faded"
-            placeholder="Select Category"
-            className="md:max-w-xs"
-          >
-            <SelectItem key={"dog"}>dog</SelectItem>
-          </Select>
+            <Select
+              onChange={(e) => setFilterValue(e.target.value)}
+              label="Filter by"
+              size="sm"
+              variant="faded"
+              placeholder="Select Category"
+              className="md:max-w-xs"
+            >
+              <SelectItem key={"dog"}>dog</SelectItem>
+            </Select>
+          </div>
 
           <div className="flex items-center gap-4">
             <Input
@@ -55,7 +57,7 @@ const HomePage = () => {
             />
             <Tooltip content="Reset Filters">
               <button className="p-3 text-gray-700 rounded-xl bg-gray-100">
-                <FaArrowRotateLeft className="text-2xl" />
+                <FaArrowRotateLeft className="text-xl" />
               </button>
             </Tooltip>
           </div>
