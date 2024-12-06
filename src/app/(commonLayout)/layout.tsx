@@ -12,11 +12,9 @@ export default function CommonLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`antialiased`}>
-        <Navbar />
-        {children}
-      </body>
-    </html>
+    <section>
+      <Navbar />
+      {children}
+    </section>
   );
 }
