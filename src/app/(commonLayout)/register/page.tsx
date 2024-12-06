@@ -30,8 +30,6 @@ const RegisterPage = () => {
     isSuccess,
   } = useUserRegistration();
 
-  console.log(userData);
-
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     handleUserRegistration({ ...data, role });
     userLoading(true);
@@ -90,7 +88,7 @@ const RegisterPage = () => {
               size="lg"
               type="submit"
             >
-              {isPending ? <Spinner color="white" /> : "Register"}
+              {isPending ? <Spinner size="sm" color="white" /> : "Register"}
             </Button>
           </CMForm>
           <div className="text-center text-sm">

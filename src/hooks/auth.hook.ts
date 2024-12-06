@@ -1,4 +1,9 @@
-import { loginUser, registerUser } from "@/services/AuthService";
+import {
+  forgotPassword,
+  loginUser,
+  registerUser,
+  resetPassword,
+} from "@/services/AuthService";
 import { useMutation } from "@tanstack/react-query";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
@@ -31,6 +36,32 @@ export const useUserLogin = () => {
       } else {
         toast.error(error.message);
       }
+    },
+  });
+};
+
+export const useForgotPassword = () => {
+  return useMutation<any, Error, FieldValues>({
+    mutationKey: ["FORGOT_PASSWORD"],
+    mutationFn: async (userData) => await forgotPassword(userData),
+    onSuccess: () => {
+      toast.success("Email sent successfully.");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+};
+
+export const useResetPassword = () => {
+  return useMutation<any, Error, FieldValues>({
+    mutationKey: ["RESET_PASSWORD"],
+    mutationFn: async (userData) => await resetPassword(userData),
+    onSuccess: () => {
+      toast.success("Password reset successfully.");
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 };

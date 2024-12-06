@@ -60,3 +60,21 @@ export const loginUser = async (userData: FieldValues) => {
     throw new Error(error);
   }
 };
+
+export const forgotPassword = async (userData: FieldValues) => {
+  try {
+    const res = await axiosInstance.post("/auth/forgot-password", userData);
+    return res.data;
+  } catch (e: any) {
+    throw new Error(e.message);
+  }
+};
+
+export const resetPassword = async (userData: FieldValues) => {
+  try {
+    const res = await axiosInstance.post("/auth/reset-password", userData);
+    return res.data;
+  } catch {
+    throw new Error("Failed to reset password");
+  }
+};

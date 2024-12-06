@@ -59,10 +59,10 @@ const LoginPage = () => {
             <div className="py-3 text-gray-900 flex flex-col gap-2">
               <CMInput label="Password" name="password" type="password" />
               <Link
-                href="/reset-password"
+                href="/forgot-password"
                 className="hover:text-primary hover:underline text-sm"
               >
-                Reset Password?
+                Forgot Password?
               </Link>
             </div>
 
@@ -72,7 +72,7 @@ const LoginPage = () => {
               size="lg"
               type="submit"
             >
-              {isPending ? <Spinner color="white" /> : "Login"}
+              {isPending ? <Spinner size="sm" color="white" /> : "Login"}
             </Button>
           </CMForm>
           <div className="text-center text-sm">
