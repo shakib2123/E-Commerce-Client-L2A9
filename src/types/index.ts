@@ -8,3 +8,9 @@ export interface IInput {
   className?: string;
   isDisabled?: boolean;
 }
+
+export type TCategory = {
+  id: string;
+  name: string;
+  description: string;
+};
