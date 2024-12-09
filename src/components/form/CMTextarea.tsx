@@ -2,17 +2,13 @@ import { IInput } from "@/types";
 import { Textarea } from "@nextui-org/input";
 import { useFormContext } from "react-hook-form";
 
-interface IProps extends IInput {
-  type?: string;
-}
-
 export default function CMTextarea({
   name,
   label,
   required = false,
   variant = "bordered",
   isDisabled = false,
-}: IProps) {
+}: IInput) {
   const {
     register,
     formState: { errors },

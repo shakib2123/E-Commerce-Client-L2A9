@@ -6,7 +6,7 @@ import {
   ModalBody,
   useDisclosure,
 } from "@nextui-org/modal";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 
 interface IProps {
   buttonText: string | ReactNode;
@@ -43,6 +43,7 @@ interface IProps {
     | "4xl"
     | "5xl"
     | "full";
+  closeModal?: boolean;
 }
 
 export default function CMModal({
@@ -55,8 +56,15 @@ export default function CMModal({
   title,
   children,
   size = "xl",
+  closeModal = false,
 }: IProps) {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+
+  useEffect(() => {
+    if (closeModal) {
+      onClose();
+    }
+  }, [closeModal, onClose]);
 
   return (
     <>

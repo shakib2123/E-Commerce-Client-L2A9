@@ -12,6 +12,7 @@ interface formConfig {
 interface IProps extends formConfig {
   children: ReactNode;
   onSubmit: SubmitHandler<any>;
+  isReset?: boolean;
 }
 
 export default function CMForm({
@@ -19,6 +20,7 @@ export default function CMForm({
   onSubmit,
   defaultValues,
   resolver,
+  isReset = false,
 }: IProps) {
   const formConfig: formConfig = {};
 
@@ -32,11 +34,17 @@ export default function CMForm({
 
   const methods = useForm(formConfig);
 
-  const submitHandler = methods.handleSubmit;
+  // const submitHandler = methods.handleSubmit;
+  const submitHandler = async (data: any) => {
+    await onSubmit(data);
+    if (isReset) {
+      methods.reset();
+    }
+  };
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={submitHandler(onSubmit)}>{children}</form>
+      <form onSubmit={methods.handleSubmit(submitHandler)}>{children}</form>
     </FormProvider>
   );
 }
