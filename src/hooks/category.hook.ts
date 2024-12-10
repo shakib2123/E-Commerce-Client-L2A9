@@ -1,6 +1,7 @@
 import {
   createCategoryIntoDB,
   getAllCategoriesFromDB,
+  updateCategoryIntoDB,
 } from "@/services/CategoryService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { FieldValues } from "react-hook-form";
@@ -26,5 +27,22 @@ export const useGetAllCategories = () => {
   return useQuery({
     queryKey: ["GET_ALL_CATEGORIES"],
     queryFn: async () => await getAllCategoriesFromDB(),
+  });
+};
+
+export const useUpdateCategory = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<any, Error, FieldValues>({
+    mutationKey: ["UPDATE_CATEGORY"],
+    mutationFn: async ({ id, categoryData }) =>
+      await updateCategoryIntoDB(id, categoryData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["GET_ALL_CATEGORIES"] });
+      toast.success("Category created successfully.");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
   });
 };

@@ -9,8 +9,8 @@ export interface IInput {
   isDisabled?: boolean;
 }
 
-export type TCategory = {
+export interface ICategory {
   id: string;
   name: string;
   description: string;
-};
+}
