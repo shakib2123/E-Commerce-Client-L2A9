@@ -20,3 +20,7 @@ export const updateCategoryIntoDB = async (
   const res = await axiosInstance.patch(`/categories/${id}`, categoryData);
   return res.data;
 };
+export const deleteCategoryFromDB = async (id: string) => {
+  const res = await axiosInstance.delete(`/categories/${id}`);
+  return res.data;
+};

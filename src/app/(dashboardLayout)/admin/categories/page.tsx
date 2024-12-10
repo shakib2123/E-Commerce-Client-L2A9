@@ -1,11 +1,11 @@
 "use client";
 
 import CreateCategoryModal from "@/components/modals/CreateCategoryModal";
+import DeleteCategoryModal from "@/components/modals/DeleteCategoryModal";
 import UpdateCategoryModal from "@/components/modals/UpdateCategoryModal";
 import { useGetAllCategories } from "@/hooks/category.hook";
 import { ICategory } from "@/types";
 import {
-  Button,
   Spinner,
   Table,
   TableBody,
@@ -31,7 +31,7 @@ const columns = [
 ];
 
 const ProductCategories = () => {
-  const { data: categories, isLoading, isSuccess } = useGetAllCategories();
+  const { data: categories, isLoading } = useGetAllCategories();
   console.log(categories?.data);
 
   return (
@@ -67,9 +67,7 @@ const ProductCategories = () => {
                   </TableCell>
                   <TableCell className="flex gap-2">
                     <UpdateCategoryModal category={category} />
-                    <Button color="danger" size="sm" variant="shadow">
-                      Delete
-                    </Button>
+                    <DeleteCategoryModal id={category?.id} />
                   </TableCell>
                 </TableRow>
               ))}

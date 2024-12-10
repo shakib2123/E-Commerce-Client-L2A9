@@ -1,5 +1,6 @@
 import {
   createCategoryIntoDB,
+  deleteCategoryFromDB,
   getAllCategoriesFromDB,
   updateCategoryIntoDB,
 } from "@/services/CategoryService";
@@ -40,6 +41,21 @@ export const useUpdateCategory = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_ALL_CATEGORIES"] });
       toast.success("Category created successfully.");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+};
+export const useDeleteCategory = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<any, Error, string>({
+    mutationKey: ["DELETE_CATEGORY"],
+    mutationFn: async (id) => await deleteCategoryFromDB(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["GET_ALL_CATEGORIES"] });
+      toast.success("Category deleted successfully.");
     },
     onError: (error) => {
       toast.error(error.message);
