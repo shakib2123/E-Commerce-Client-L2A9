@@ -28,12 +28,12 @@ export const dashboardRoutes = {
     },
     {
       name: "Manage Users",
-      path: "/admin/mange-users",
+      path: "/admin/users",
       icon: <FaUsers size={24} />,
     },
     {
-      name: "Manage Vendors",
-      path: "/admin/vendors",
+      name: "Manage Shops",
+      path: "/admin/shops",
       icon: <MdStore size={24} />,
     },
     {

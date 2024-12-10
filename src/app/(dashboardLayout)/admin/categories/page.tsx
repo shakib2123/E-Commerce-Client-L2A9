@@ -32,16 +32,20 @@ const columns = [
 
 const ProductCategories = () => {
   const { data: categories, isLoading } = useGetAllCategories();
-  console.log(categories?.data);
 
   return (
-    <section className="max-w-screen-xl mx-auto py-4">
+    <section className="max-w-screen-xl mx-auto">
       <h1 className="text-xl md:text-2xl font-medium mb-4">
         Product Categories!
       </h1>
 
-      {/* modal */}
-      <CreateCategoryModal />
+      <div className="flex flex-col md:flex-row justify-between md:items-center gap-2">
+        <h1 className="text-lg font-medium">
+          Total Categories: {categories?.data?.length || 0}
+        </h1>
+        {/* modal */}
+        <CreateCategoryModal />
+      </div>
 
       {/* get all categories */}
       <div className="mt-4">

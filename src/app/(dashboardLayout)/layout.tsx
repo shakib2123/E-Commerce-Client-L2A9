@@ -16,7 +16,7 @@ const DashboardLayout = ({
     <section>
       <SidebarMobile />
       <Sidebar />
-      <div className="lg:ml-[290px] px-3 lg:px-5">{children}</div>
+      <div className="lg:ml-[290px] px-3 lg:px-5 py-4">{children}</div>
     </section>
   );
 };

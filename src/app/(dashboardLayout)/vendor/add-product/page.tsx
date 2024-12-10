@@ -61,7 +61,7 @@ const AddProduct = () => {
   // }, [isSuccess]);
 
   return (
-    <section className="max-w-screen-xl mx-auto py-4">
+    <section className="max-w-screen-xl mx-auto">
       <h1 className="text-xl md:text-2xl font-medium">
         Add Product For Your Shop!
       </h1>

@@ -23,7 +23,7 @@ const UpdateCategoryModal = ({ category }: { category: ICategory }) => {
         buttonText="Edit"
         buttonColor="primary"
         buttonSize="sm"
-        closeModal={isSuccess}
+        closeModal={isSuccess && !isPending}
       >
         <CMForm
           onSubmit={handleSubmit}

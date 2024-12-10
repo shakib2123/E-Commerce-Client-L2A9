@@ -14,3 +14,18 @@ export interface ICategory {
   name: string;
   description: string;
 }
+
+export interface IUser {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  role: string;
+  profilePhoto: string;
+  address: string;
+  lastLogin: string;
+  isBlocked: boolean;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+}

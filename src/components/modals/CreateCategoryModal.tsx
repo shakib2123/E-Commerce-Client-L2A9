@@ -12,6 +12,8 @@ const CreateCategoryModal = () => {
     mutate: createCategory,
     isPending: isLoading,
     isSuccess,
+    isError,
+    error,
   } = useCreateCategory();
   const handleSubmit: SubmitHandler<FieldValues> = (data) => {
     const categoryData = {
@@ -27,12 +29,12 @@ const CreateCategoryModal = () => {
         title="Add New Category"
         buttonText="Add Category"
         buttonColor="primary"
-        closeModal={isSuccess}
+        closeModal={isSuccess && !isLoading && !isError && !error}
       >
         <CMForm
           onSubmit={handleSubmit}
           resolver={zodResolver(categoryValidationSchema)}
-          isReset={isSuccess}
+          isReset={isSuccess && !isLoading && !isError && !error}
         >
           <div className="flex flex-col gap-4">
             <CMInput label="Category Name" name="categoryName" />
