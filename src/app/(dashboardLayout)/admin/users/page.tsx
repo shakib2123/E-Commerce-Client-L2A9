@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetAllUsers } from "@/hooks/user.hook";
+import { useGetAllUsers, useUpdateUser } from "@/hooks/user.hook";
 import { IUser } from "@/types";
 import {
   Avatar,
@@ -14,6 +14,8 @@ import {
   TableRow,
 } from "@nextui-org/react";
 import { format } from "date-fns";
+import { is } from "date-fns/locale";
+import { useEffect, useState } from "react";
 
 const columns = [
   {
@@ -51,7 +53,41 @@ const columns = [
 ];
 
 const ManageUsers = () => {
-  const { data: users, isLoading } = useGetAllUsers();
+  const [currentUserId, setCurrentUserId] = useState("");
+  const [status, setStatus] = useState("");
+
+  const { data: users, isLoading, refetch } = useGetAllUsers();
+  const {
+    mutate: updateUser,
+    isPending: isUpdating,
+    isSuccess: isUpdated,
+  } = useUpdateUser();
+
+  const handleSuspendUser = (id: string, isBlocked: boolean) => {
+    const userData = {
+      isBlocked: !isBlocked,
+    };
+
+    updateUser({ id, userData });
+  };
+
+  const handleDeleteUser = (id: string, isDeleted: boolean) => {
+    const userData = {
+      isDeleted: !isDeleted,
+    };
+    console.log(userData);
+
+    updateUser({ id, userData });
+  };
+
+  useEffect(() => {
+    if (isUpdated) {
+      setCurrentUserId("");
+      setStatus("");
+      refetch();
+    }
+  }, [isUpdated, refetch]);
+
   return (
     <section className="max-w-screen-xl mx-auto">
       <h1 className="text-xl md:text-2xl font-medium mb-4">All Users!</h1>
@@ -59,7 +95,7 @@ const ManageUsers = () => {
         Total Users: {users?.data?.length || 0}
       </h1>
       {/* users table */}
-      <div>
+      <div className="mt-4">
         {isLoading ? (
           <div className="flex items-center justify-center min-h-80">
             <Spinner size="lg" />
@@ -102,11 +138,47 @@ const ManageUsers = () => {
                     {format(user?.createdAt, "hh:mm aa - MMMM dd, yyyy")}
                   </TableCell>
                   <TableCell className="flex gap-2">
-                    <Button size="sm" className="min-w-[85px]" color="warning">
-                      Suspend
+                    <Button
+                      onClick={() => {
+                        handleSuspendUser(user?.id, user?.isBlocked);
+                        setCurrentUserId(user?.id);
+                        setStatus("suspend");
+                      }}
+                      size="sm"
+                      className="min-w-[85px]"
+                      color="warning"
+                    >
+                      {isUpdating &&
+                      currentUserId === user?.id &&
+                      !isUpdated &&
+                      status === "suspend" ? (
+                        <Spinner color="white" size="sm" />
+                      ) : user?.isBlocked ? (
+                        <span>Unsuspend</span>
+                      ) : (
+                        <span>Suspend</span>
+                      )}
                     </Button>
-                    <Button size="sm" className="min-w-[85px]" color="danger">
-                      Delete
+                    <Button
+                      onClick={() => {
+                        handleDeleteUser(user?.id, user?.isDeleted);
+                        setCurrentUserId(user?.id);
+                        setStatus("delete");
+                      }}
+                      size="sm"
+                      className="min-w-[85px]"
+                      color="danger"
+                    >
+                      {isUpdating &&
+                      currentUserId === user?.id &&
+                      !isUpdated &&
+                      status === "delete" ? (
+                        <Spinner color="white" size="sm" />
+                      ) : user?.isDeleted ? (
+                        <span>Deleted</span>
+                      ) : (
+                        <span>Delete</span>
+                      )}
                     </Button>
                   </TableCell>
                 </TableRow>
