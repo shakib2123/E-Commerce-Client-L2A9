@@ -1,7 +1,7 @@
 "use client";
 
 import { IInput } from "@/types";
-import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
+import { Select, SelectItem } from "@nextui-org/react";
 import { useFormContext } from "react-hook-form";
 
 // Define the TItems type
@@ -30,7 +30,7 @@ export default function CMSelect({
   } = useFormContext();
 
   return (
-    <Autocomplete
+    <Select
       {...register(name)}
       errorMessage={errors[name] ? (errors[name].message as string) : ""}
       isInvalid={!!errors[name]}
@@ -42,8 +42,8 @@ export default function CMSelect({
       isDisabled={isDisabled}
     >
       {itemData?.map((item) => (
-        <AutocompleteItem key={item?.key}>{item?.label}</AutocompleteItem>
+        <SelectItem key={item?.key}>{item?.label}</SelectItem>
       ))}
-    </Autocomplete>
+    </Select>
   );
 }

@@ -3,6 +3,10 @@
 import CMForm from "@/components/form/CMForm";
 import CMInput from "@/components/form/CMInput";
 import CMSelect from "@/components/form/CMSelect";
+import { useGetAllCategories } from "@/hooks/category.hook";
+import createProductValidationSchema from "@/schemas/product.schema";
+import { ICategory } from "@/types";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@nextui-org/react";
 import Image from "next/image";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -30,6 +34,8 @@ const AddProduct = () => {
 
   // const { mutate: createPost, isPending, isSuccess } = useCreatePost();
 
+  const { data: categories, isLoading, isSuccess } = useGetAllCategories();
+
   const handleSubmit: SubmitHandler<FieldValues> = (data) => {
     console.log(data, imageFiles!);
   };
@@ -53,6 +59,11 @@ const AddProduct = () => {
     }
   };
 
+  const categoryData = categories?.data?.map((category: ICategory) => ({
+    key: category?.id,
+    label: category?.name,
+  }));
+
   // useEffect(() => {
   //   if (isSuccess) {
   //     setImageFiles([]);
@@ -68,28 +79,28 @@ const AddProduct = () => {
 
       {/* Add Product Form */}
       <div className="my-4">
-        <CMForm onSubmit={handleSubmit}>
+        <CMForm
+          resolver={zodResolver(createProductValidationSchema)}
+          onSubmit={handleSubmit}
+        >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <CMInput label="Product Name" name="name" required={true} />
-            <CMInput label="Description" name="description" required={true} />
+            <CMInput label="Product Name" name="productName" />
+            <CMInput label="Description" name="productDescription" />
             <CMSelect
-              itemData={animals}
+              itemData={categoryData}
               label="Category"
-              name="category"
-              required={true}
+              name="productCategory"
             />
-            <CMInput label="Price" name="price" type="number" required={true} />
+            <CMInput label="Price" name="productPrice" type="number" />
             <CMInput
               label="Discount Price"
-              name="discount"
+              name="discountPrice"
               type="number"
-              required={true}
             />
             <CMInput
               label="Inventory Count"
               name="inventoryCount"
               type="number"
-              required={true}
             />
           </div>
 
@@ -127,7 +138,6 @@ const AddProduct = () => {
                   type="file"
                   className="hidden"
                   name="productImages"
-                  required
                 />
               </label>
             </div>

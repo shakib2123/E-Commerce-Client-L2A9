@@ -24,7 +24,6 @@ const LoginPage = () => {
   const { mutate: handleUserLogin, isPending, isSuccess } = useUserLogin();
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    console.log(data);
     handleUserLogin(data);
     userLoading(true);
   };
