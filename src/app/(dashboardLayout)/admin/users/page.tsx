@@ -14,7 +14,6 @@ import {
   TableRow,
 } from "@nextui-org/react";
 import { format } from "date-fns";
-import { is } from "date-fns/locale";
 import { useEffect, useState } from "react";
 
 const columns = [

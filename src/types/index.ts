@@ -29,3 +29,16 @@ export interface IUser {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface IShop {
+  id: string;
+  name: string;
+  description: string;
+  logo: string;
+  email: string;
+  isBlocked: boolean;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+  user: IUser;
+}

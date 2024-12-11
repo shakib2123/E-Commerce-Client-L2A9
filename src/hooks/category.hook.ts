@@ -15,7 +15,7 @@ export const useCreateCategory = () => {
     mutationFn: async (categoryData) =>
       await createCategoryIntoDB(categoryData),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["GET_ALL_CATEGORIES"] });
+      queryClient.invalidateQueries({ queryKey: ["ALL_CATEGORIES"] });
       toast.success("Category created successfully.");
     },
     onError: (error) => {
@@ -26,7 +26,7 @@ export const useCreateCategory = () => {
 
 export const useGetAllCategories = () => {
   return useQuery({
-    queryKey: ["GET_ALL_CATEGORIES"],
+    queryKey: ["ALL_CATEGORIES"],
     queryFn: async () => await getAllCategoriesFromDB(),
   });
 };
@@ -39,7 +39,7 @@ export const useUpdateCategory = () => {
     mutationFn: async ({ id, categoryData }) =>
       await updateCategoryIntoDB(id, categoryData),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["GET_ALL_CATEGORIES"] });
+      queryClient.invalidateQueries({ queryKey: ["ALL_CATEGORIES"] });
       toast.success("Category created successfully.");
     },
     onError: (error) => {
@@ -54,7 +54,7 @@ export const useDeleteCategory = () => {
     mutationKey: ["DELETE_CATEGORY"],
     mutationFn: async (id) => await deleteCategoryFromDB(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["GET_ALL_CATEGORIES"] });
+      queryClient.invalidateQueries({ queryKey: ["ALL_CATEGORIES"] });
       toast.success("Category deleted successfully.");
     },
     onError: (error) => {
