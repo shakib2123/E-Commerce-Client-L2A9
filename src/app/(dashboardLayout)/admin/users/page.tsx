@@ -55,7 +55,12 @@ const ManageUsers = () => {
   const [currentUserId, setCurrentUserId] = useState("");
   const [status, setStatus] = useState("");
 
-  const { data: users, isLoading, refetch } = useGetAllUsers();
+  const {
+    data: users,
+    isLoading,
+    refetch,
+  } = useGetAllUsers({ status: "exceptAdmin" });
+
   const {
     mutate: updateUser,
     isPending: isUpdating,

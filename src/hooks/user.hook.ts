@@ -7,10 +7,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
 
-export const useGetAllUsers = () => {
+export const useGetAllUsers = ({ status }: { status: string }) => {
   return useQuery({
     queryKey: ["ALL_USERS"],
-    queryFn: async () => await getAllUsersFromDB(),
+    queryFn: async () => await getAllUsersFromDB(status),
   });
 };
 
