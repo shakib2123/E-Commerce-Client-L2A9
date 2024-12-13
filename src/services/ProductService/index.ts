@@ -10,3 +10,7 @@ export const createProductIntoDB = async (formData: FormData) => {
   });
   return data;
 };
+export const getMyProductsFromDB = async () => {
+  const { data } = await axiosInstance.get("/products/my-products");
+  return data;
+};
