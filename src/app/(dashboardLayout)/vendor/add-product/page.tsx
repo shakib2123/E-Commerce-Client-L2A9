@@ -7,11 +7,15 @@ import { useGetAllCategories } from "@/hooks/category.hook";
 import createProductValidationSchema from "@/schemas/product.schema";
 import { ICategory } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@nextui-org/react";
+import { Button, Spinner } from "@nextui-org/react";
 import Image from "next/image";
 import { ChangeEvent, useEffect, useState } from "react";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 import { toast } from "sonner";
+import { IoWarningOutline } from "react-icons/io5";
+import { useCreateProduct } from "@/hooks/product.hook";
+import { useRouter } from "next/navigation";
+
 export const animals = [
   { key: "cat", label: "Cat" },
   { key: "dog", label: "Dog" },
@@ -32,12 +36,41 @@ const AddProduct = () => {
   const [imageFiles, setImageFiles] = useState<File[] | null>([]);
   const [imagePreviews, setImagePreviews] = useState<string[] | []>([]);
 
-  // const { mutate: createPost, isPending, isSuccess } = useCreatePost();
+  const router = useRouter();
 
-  const { data: categories, isLoading, isSuccess } = useGetAllCategories();
+  const {
+    mutate: createProduct,
+    isPending: isProductCreating,
+    isSuccess: isProductCreated,
+  } = useCreateProduct();
+
+  const { data: categories, isLoading: isCategoryLoading } =
+    useGetAllCategories();
 
   const handleSubmit: SubmitHandler<FieldValues> = (data) => {
-    console.log(data, imageFiles!);
+    if (!!imageFiles && imageFiles.length <= 0) {
+      return;
+    }
+
+    const formData = new FormData();
+
+    // Add JSON data to FormData
+    const productData = {
+      name: data.productName,
+      description: data.productDescription,
+      price: data.productPrice,
+      discountPrice: data.discountPrice,
+      categoryId: data.productCategory,
+      inventoryCount: data.inventoryCount,
+    };
+
+    formData.append("data", JSON.stringify(productData));
+
+    for (const image of imageFiles!) {
+      formData.append("productImages", image);
+    }
+
+    createProduct(formData);
   };
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -64,12 +97,13 @@ const AddProduct = () => {
     label: category?.name,
   }));
 
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     setImageFiles([]);
-  //     setImagePreviews([]);
-  //   }
-  // }, [isSuccess]);
+  useEffect(() => {
+    if (isProductCreated) {
+      setImageFiles([]);
+      setImagePreviews([]);
+      router.push("/vendor/products");
+    }
+  }, [isProductCreated, router]);
 
   return (
     <section className="max-w-screen-xl mx-auto">
@@ -82,6 +116,7 @@ const AddProduct = () => {
         <CMForm
           resolver={zodResolver(createProductValidationSchema)}
           onSubmit={handleSubmit}
+          isReset={isProductCreated === true}
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <CMInput label="Product Name" name="productName" />
@@ -90,6 +125,7 @@ const AddProduct = () => {
               itemData={categoryData}
               label="Category"
               name="productCategory"
+              isDisabled={isCategoryLoading}
             />
             <CMInput label="Price" name="productPrice" type="number" />
             <CMInput
@@ -141,6 +177,16 @@ const AddProduct = () => {
                 />
               </label>
             </div>
+
+            {!!imageFiles && imageFiles.length <= 0 ? (
+              <p className="text-red-500 mt-2 flex gap-1">
+                <IoWarningOutline className="text-lg" /> Uploading image for
+                product is required!
+              </p>
+            ) : (
+              ""
+            )}
+
             {imagePreviews?.length > 0 && (
               <div className="flex gap-4 md:gap-3 flex-wrap mt-4">
                 {imagePreviews?.map((imageDataUrl) => (
@@ -161,7 +207,11 @@ const AddProduct = () => {
             )}
           </div>
           <Button type="submit" className="mt-4 w-full" color="primary">
-            Create
+            {isProductCreating ? (
+              <Spinner size="sm" color="white" />
+            ) : (
+              "Add Product"
+            )}
           </Button>
         </CMForm>
       </div>
