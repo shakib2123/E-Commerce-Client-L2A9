@@ -2,6 +2,7 @@
 
 import {
   useCreateDuplicateProduct,
+  useDeleteProduct,
   useGetMyProducts,
 } from "@/hooks/product.hook";
 import { IProduct } from "@/types";
@@ -17,6 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
+
 import { useEffect, useState } from "react";
 
 const columns = [
@@ -75,6 +77,12 @@ const ProductManagement = () => {
     isSuccess: isDuplicateProductSuccess,
   } = useCreateDuplicateProduct();
 
+  const {
+    mutate: deleteProduct,
+    isPending: isDeleteProductLoading,
+    isSuccess: isDeleteProductSuccess,
+  } = useDeleteProduct();
+
   const handleDuplicateProduct = (product: IProduct) => {
     setStatus("Duplicating");
     setProductId(product?.id);
@@ -93,13 +101,24 @@ const ProductManagement = () => {
     createDuplicateProduct(productData);
   };
 
+  const handleDeleteProduct = (id: string) => {
+    setStatus("Deleting");
+    setProductId(id);
+    deleteProduct(id);
+  };
+
   useEffect(() => {
     if (isDuplicateProductSuccess) {
       refetch();
       setProductId("");
       setStatus("");
     }
-  }, [isDuplicateProductSuccess, refetch]);
+    if (isDeleteProductSuccess) {
+      refetch();
+      setProductId("");
+      setStatus("");
+    }
+  }, [isDuplicateProductSuccess, isDeleteProductSuccess, refetch]);
 
   return (
     <section className="max-w-screen-xl mx-auto">
@@ -181,8 +200,19 @@ const ProductManagement = () => {
                     <Button size="sm" color="warning">
                       Edit
                     </Button>
-                    <Button size="sm" color="danger">
-                      Delete
+                    <Button
+                      className="min-w-[65px]"
+                      onClick={() => handleDeleteProduct(product?.id)}
+                      size="sm"
+                      color="danger"
+                    >
+                      {isDeleteProductLoading &&
+                      productId === product?.id &&
+                      status === "Deleting" ? (
+                        <Spinner color="white" size="sm" />
+                      ) : (
+                        "Delete"
+                      )}
                     </Button>
                   </TableCell>
                 </TableRow>
