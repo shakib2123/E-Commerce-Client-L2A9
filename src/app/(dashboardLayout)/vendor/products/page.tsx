@@ -1,10 +1,14 @@
 "use client";
 
-import { useGetMyProducts } from "@/hooks/product.hook";
+import {
+  useCreateDuplicateProduct,
+  useGetMyProducts,
+} from "@/hooks/product.hook";
 import { IProduct } from "@/types";
 import {
   Avatar,
   Button,
+  Input,
   Spinner,
   Table,
   TableBody,
@@ -13,6 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
+import { useEffect, useState } from "react";
 
 const columns = [
   {
@@ -59,9 +64,42 @@ const columns = [
 ];
 
 const ProductManagement = () => {
-  const { data: products, isLoading, isSuccess } = useGetMyProducts();
+  const [productId, setProductId] = useState("");
+  const [status, setStatus] = useState("");
 
-  console.log(products);
+  const { data: products, isLoading, isSuccess, refetch } = useGetMyProducts();
+
+  const {
+    mutate: createDuplicateProduct,
+    isPending: isDuplicateProductLoading,
+    isSuccess: isDuplicateProductSuccess,
+  } = useCreateDuplicateProduct();
+
+  const handleDuplicateProduct = (product: IProduct) => {
+    setStatus("Duplicating");
+    setProductId(product?.id);
+    const productData = {
+      name: product?.name,
+      description: product?.description,
+      price: product?.price,
+      discountPrice: product?.discountPrice,
+      categoryId: product?.categoryId,
+      shopId: product?.shopId,
+      userId: product?.userId,
+      inventoryCount: product?.inventoryCount,
+      images: product?.images,
+    };
+
+    createDuplicateProduct(productData);
+  };
+
+  useEffect(() => {
+    if (isDuplicateProductSuccess) {
+      refetch();
+      setProductId("");
+      setStatus("");
+    }
+  }, [isDuplicateProductSuccess, refetch]);
 
   return (
     <section className="max-w-screen-xl mx-auto">
@@ -110,10 +148,35 @@ const ProductManagement = () => {
                       ? `$ ${product?.flashSalePrice}`
                       : "-"}
                   </TableCell>
-                  <TableCell>{product?.inventoryCount}</TableCell>
-                  <TableCell className="min-w-[350px] md:min-w-full flex gap-2">
-                    <Button size="sm" color="primary">
-                      Duplicate
+
+                  <TableCell className="min-w-[150px]">
+                    <Input
+                      onChange={(e) => {
+                        console.log(e.target.value);
+                      }}
+                      variant="bordered"
+                      type="number"
+                      name="quantity"
+                      placeholder="Quantity"
+                      defaultValue={`${product?.inventoryCount || 0}`}
+                      className="min-w-24 w-full"
+                    />
+                  </TableCell>
+
+                  <TableCell className="min-w-full flex gap-2">
+                    <Button
+                      onClick={() => handleDuplicateProduct(product)}
+                      size="sm"
+                      color="primary"
+                      className="min-w-[75px]"
+                    >
+                      {isDuplicateProductLoading &&
+                      productId === product?.id &&
+                      status === "Duplicating" ? (
+                        <Spinner color="white" size="sm" />
+                      ) : (
+                        "Duplicate"
+                      )}
                     </Button>
                     <Button size="sm" color="warning">
                       Edit

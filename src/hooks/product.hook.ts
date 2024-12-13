@@ -1,4 +1,5 @@
 import {
+  createDuplicateProductIntoDB,
   createProductIntoDB,
   getMyProductsFromDB,
 } from "@/services/ProductService";
@@ -13,6 +14,22 @@ export const useCreateProduct = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_MY_PRODUCTS"] });
       toast.success("Product created successfully");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+};
+
+export const useCreateDuplicateProduct = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, Record<string, unknown>>({
+    mutationKey: ["CREATE_DUPLICATE_PRODUCT"],
+    mutationFn: async (productData) =>
+      await createDuplicateProductIntoDB(productData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["GET_MY_PRODUCTS"] });
+      toast.success("Product duplicated successfully");
     },
     onError: (error) => {
       toast.error(error.message);

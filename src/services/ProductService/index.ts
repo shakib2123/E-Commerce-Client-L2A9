@@ -10,6 +10,17 @@ export const createProductIntoDB = async (formData: FormData) => {
   });
   return data;
 };
+
+export const createDuplicateProductIntoDB = async (
+  productData: Record<string, unknown>
+) => {
+  const { data } = await axiosInstance.post(
+    "/products/create-duplicate-product",
+    productData
+  );
+  return data;
+};
+
 export const getMyProductsFromDB = async () => {
   const { data } = await axiosInstance.get("/products/my-products");
   return data;
