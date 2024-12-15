@@ -25,6 +25,19 @@ export const getMyProductsFromDB = async () => {
   const { data } = await axiosInstance.get("/products/my-products");
   return data;
 };
+
+export const getProductById = async (id: string) => {
+  const { data } = await axiosInstance.get(`/products/${id}`);
+  return data;
+};
+export const updateProductIntoDB = async (
+  id: string,
+  payload: Record<string, unknown>
+) => {
+  const { data } = await axiosInstance.patch(`/products/${id}`, payload);
+  return data;
+};
+
 export const deleteProductFromDB = async (id: string) => {
   const { data } = await axiosInstance.delete(`/products/${id}`);
   return data;

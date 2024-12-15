@@ -45,6 +45,7 @@ export const config = {
     "/admin/:page*",
     "/vendor/:page*",
     "/user/:page*",
+    "/profile",
     "/login",
     "/register",
   ],

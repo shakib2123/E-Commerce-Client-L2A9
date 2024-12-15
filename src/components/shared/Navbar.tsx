@@ -38,7 +38,15 @@ export default function Navbar() {
     }
   };
 
-  const userRole = user?.role === "USER" ? "user" : "admin";
+  let userRole;
+
+  if (user?.role === "VENDOR") {
+    userRole = "vendor";
+  } else if (user?.role === "USER") {
+    userRole = "user";
+  } else if (user?.role === "ADMIN") {
+    userRole = "admin";
+  }
 
   return (
     <NextUINavbar maxWidth="xl" position="sticky" className="bg-orange-600">
@@ -107,7 +115,7 @@ export default function Navbar() {
         <NavbarMenuToggle />
       </NavbarContent>
 
-      <NavbarMenu className="bg-black/10 text-gray-900">
+      <NavbarMenu className="bg-black/5 text-gray-900">
         <div className="mx-4 mt-2 flex flex-col gap-2">
           <NavbarMenuItem>
             <Link href="/" className="w-full h-full">
@@ -121,6 +129,27 @@ export default function Navbar() {
           </NavbarMenuItem>
 
           <NavbarMenuItem>
+            <Link href="/shop" aria-current="page" className="w-full h-full">
+              <Button
+                color={pathname === "/shop" ? "primary" : "default"}
+                className="w-full h-full"
+              >
+                Shop
+              </Button>
+            </Link>
+          </NavbarMenuItem>
+          <NavbarMenuItem>
+            <Link href="/profile" aria-current="page" className="w-full h-full">
+              <Button
+                color={pathname === "/profile" ? "primary" : "default"}
+                className="w-full h-full"
+              >
+                Profile
+              </Button>
+            </Link>
+          </NavbarMenuItem>
+
+          <NavbarMenuItem>
             <Link href={`${userRole}/dashboard`} className="w-full h-full">
               <Button
                 color={
@@ -129,17 +158,6 @@ export default function Navbar() {
                 className="w-full h-full"
               >
                 Dashboard
-              </Button>
-            </Link>
-          </NavbarMenuItem>
-
-          <NavbarMenuItem>
-            <Link href="/shop" aria-current="page" className="w-full h-full">
-              <Button
-                color={pathname === "/shop" ? "primary" : "default"}
-                className="w-full h-full"
-              >
-                Shop
               </Button>
             </Link>
           </NavbarMenuItem>

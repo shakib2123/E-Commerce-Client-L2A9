@@ -3,6 +3,8 @@ import {
   createProductIntoDB,
   deleteProductFromDB,
   getMyProductsFromDB,
+  getProductById,
+  updateProductIntoDB,
 } from "@/services/ProductService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -44,7 +46,33 @@ export const useGetMyProducts = () => {
     queryFn: async () => await getMyProductsFromDB(),
   });
 };
+export const useGetProductById = (id: string) => {
+  return useQuery({
+    queryKey: ["GET_PRODUCT_BY_ID"],
+    queryFn: async () => await getProductById(id),
+  });
+};
 
+export const useUpdateProduct = () => {
+  const queryClient = useQueryClient();
+  return useMutation<
+    any,
+    Error,
+    { id: string; payload: Record<string, unknown> }
+  >({
+    mutationKey: ["UPDATE_PRODUCT"],
+    mutationFn: async ({ id, payload }) =>
+      await updateProductIntoDB(id, payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["GET_MY_PRODUCTS"] });
+      queryClient.invalidateQueries({ queryKey: ["GET_PRODUCT_BY_ID"] });
+      toast.success("Product updated successfully");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+};
 export const useDeleteProduct = () => {
   const queryClient = useQueryClient();
   return useMutation<any, Error, string>({

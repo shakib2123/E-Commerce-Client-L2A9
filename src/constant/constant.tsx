@@ -17,7 +17,7 @@ import {
   MdStorefront,
 } from "react-icons/md";
 
-export const protectedRoutes = ["/user", "/admin", "/vendor"];
+export const protectedRoutes = ["/user", "/admin", "/vendor", "/profile"];
 
 export const dashboardRoutes = {
   ADMIN: [

@@ -12,6 +12,7 @@ export type TItemData = {
 
 export interface CMSelectProps extends IInput {
   itemData: TItemData[];
+  defaultValue?: string;
 }
 
 export default function CMSelect({
@@ -23,6 +24,7 @@ export default function CMSelect({
   className,
   isDisabled = false,
   itemData,
+  defaultValue,
 }: CMSelectProps) {
   const {
     register,
@@ -40,6 +42,7 @@ export default function CMSelect({
       variant={variant}
       className={className}
       isDisabled={isDisabled}
+      defaultSelectedKeys={defaultValue ? [defaultValue] : []}
     >
       {itemData?.map((item) => (
         <SelectItem key={item?.key}>{item?.label}</SelectItem>

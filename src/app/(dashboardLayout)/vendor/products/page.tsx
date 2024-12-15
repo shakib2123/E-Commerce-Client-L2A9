@@ -1,9 +1,11 @@
 "use client";
 
+import useDebounce from "@/hooks/debounce.hook";
 import {
   useCreateDuplicateProduct,
   useDeleteProduct,
   useGetMyProducts,
+  useUpdateProduct,
 } from "@/hooks/product.hook";
 import { IProduct } from "@/types";
 import {
@@ -18,6 +20,7 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 
 import { useEffect, useState } from "react";
 
@@ -69,6 +72,10 @@ const ProductManagement = () => {
   const [productId, setProductId] = useState("");
   const [status, setStatus] = useState("");
 
+  const [quantityValue, setQuantityValue] = useState(0);
+
+  const router = useRouter();
+
   const { data: products, isLoading, isSuccess, refetch } = useGetMyProducts();
 
   const {
@@ -82,6 +89,9 @@ const ProductManagement = () => {
     isPending: isDeleteProductLoading,
     isSuccess: isDeleteProductSuccess,
   } = useDeleteProduct();
+
+  const { mutate: updateProduct, isPending: updateproductLoading } =
+    useUpdateProduct();
 
   const handleDuplicateProduct = (product: IProduct) => {
     setStatus("Duplicating");
@@ -106,6 +116,18 @@ const ProductManagement = () => {
     setProductId(id);
     deleteProduct(id);
   };
+
+  useEffect(() => {
+    const handleUpdateQuantity = () => {
+      if (productId && quantityValue !== null && quantityValue >= 0) {
+        updateProduct({
+          id: productId,
+          payload: { inventoryCount: quantityValue },
+        });
+      }
+    };
+    handleUpdateQuantity();
+  }, [quantityValue, updateProduct, productId]);
 
   useEffect(() => {
     if (isDuplicateProductSuccess) {
@@ -170,14 +192,17 @@ const ProductManagement = () => {
 
                   <TableCell className="min-w-[150px]">
                     <Input
-                      onChange={(e) => {
-                        console.log(e.target.value);
+                      onBlur={(e) => {
+                        setQuantityValue(
+                          Number((e.target as HTMLInputElement).value)
+                        ); // Update quantity
+                        setProductId(product?.id); // Ensure product ID is set
                       }}
                       variant="bordered"
                       type="number"
                       name="quantity"
                       placeholder="Quantity"
-                      defaultValue={`${product?.inventoryCount || 0}`}
+                      defaultValue={product?.inventoryCount.toString()}
                       className="min-w-24 w-full"
                     />
                   </TableCell>
@@ -197,7 +222,13 @@ const ProductManagement = () => {
                         "Duplicate"
                       )}
                     </Button>
-                    <Button size="sm" color="warning">
+                    <Button
+                      onClick={() =>
+                        router.push(`/vendor/update-product/${product?.id}`)
+                      }
+                      size="sm"
+                      color="warning"
+                    >
                       Edit
                     </Button>
                     <Button

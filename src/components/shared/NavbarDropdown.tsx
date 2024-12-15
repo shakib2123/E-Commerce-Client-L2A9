@@ -58,6 +58,9 @@ export default function NavbarDropdown() {
         <DropdownItem href={`/${userRole}/dashboard`} className="w-full">
           Dashboard
         </DropdownItem>
+        <DropdownItem href={`/profile`} className="w-full">
+          Profile
+        </DropdownItem>
         <DropdownItem
           onClick={() => handleLogout()}
           key="delete"
