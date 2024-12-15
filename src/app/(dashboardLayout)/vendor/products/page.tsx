@@ -1,6 +1,5 @@
 "use client";
 
-import useDebounce from "@/hooks/debounce.hook";
 import {
   useCreateDuplicateProduct,
   useDeleteProduct,
@@ -90,8 +89,7 @@ const ProductManagement = () => {
     isSuccess: isDeleteProductSuccess,
   } = useDeleteProduct();
 
-  const { mutate: updateProduct, isPending: updateproductLoading } =
-    useUpdateProduct();
+  const { mutate: updateProduct } = useUpdateProduct();
 
   const handleDuplicateProduct = (product: IProduct) => {
     setStatus("Duplicating");
