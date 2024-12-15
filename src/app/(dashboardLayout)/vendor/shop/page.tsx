@@ -1,8 +1,9 @@
 "use client";
 
+import UpdateShopInfoModal from "@/components/modals/UpdateShopInfoModal";
 import { useGetMyShop, useUpdateShopImage } from "@/hooks/shop.hook";
-import { Avatar, Spinner, Tooltip } from "@nextui-org/react";
-import { FaCamera, FaPen } from "react-icons/fa";
+import { Avatar, Spinner } from "@nextui-org/react";
+import { FaCamera } from "react-icons/fa";
 
 const Shop = () => {
   const { data: shop, isLoading: isShopLoading } = useGetMyShop();
@@ -19,6 +20,7 @@ const Shop = () => {
 
     updateShopImage({ id: shop?.data?.id, formData });
   };
+
   return (
     <section className="max-w-screen-xl mx-auto">
       {isShopLoading ? (
@@ -58,11 +60,8 @@ const Shop = () => {
                 <h3 className="font-semibold text-xl">
                   {shop?.data?.name || "Shop Name"}
                 </h3>
-                <Tooltip content="Edit Shop Info">
-                  <button className="p-2 rounded-lg hover:bg-gray-50 w-fit cursor-pointer">
-                    <FaPen className="text-[16px]" />
-                  </button>
-                </Tooltip>
+
+                <UpdateShopInfoModal shop={shop?.data} />
               </div>
 
               <p>{shop?.data?.description || "Shop Description"}</p>
