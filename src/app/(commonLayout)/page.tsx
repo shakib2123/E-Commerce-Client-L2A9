@@ -1,6 +1,9 @@
 "use client";
 import ScrollToTopButton from "@/components/shared/ScrollTopButton";
+import { useGetAllCategories } from "@/hooks/category.hook";
 import useDebounce from "@/hooks/debounce.hook";
+import { useGetAllProducts } from "@/hooks/product.hook";
+import { ICategory } from "@/types";
 import { Input, Select, SelectItem, Tooltip } from "@nextui-org/react";
 import { useState } from "react";
 import { FaArrowRotateLeft } from "react-icons/fa6";
@@ -10,6 +13,18 @@ const HomePage = () => {
   const [searchValue, setSearchValue] = useState("");
   const [filterValue, setFilterValue] = useState("");
   const debouncedSearchValue = useDebounce(searchValue);
+
+  const { data: categories, isLoading: isCategoryLoading } =
+    useGetAllCategories();
+
+  const { data: products, isLoading: isProductLoading } = useGetAllProducts();
+
+  console.log(products);
+
+  const categoryData = categories?.data?.map((category: ICategory) => ({
+    key: category?.id,
+    label: category?.name,
+  }));
 
   return (
     <section className="max-w-screen-xl mx-auto px-3">
@@ -33,8 +48,11 @@ const HomePage = () => {
               variant="faded"
               placeholder="Select Category"
               className="md:max-w-xs"
+              isDisabled={isCategoryLoading}
             >
-              <SelectItem key={"dog"}>dog</SelectItem>
+              {categoryData?.map((category: { key: string; label: string }) => (
+                <SelectItem key={category.key}>{category.label}</SelectItem>
+              ))}
             </Select>
           </div>
 

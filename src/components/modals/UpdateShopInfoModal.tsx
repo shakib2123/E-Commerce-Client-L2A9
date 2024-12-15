@@ -56,4 +56,5 @@ const UpdateShopInfoModal = ({ shop }: { shop: IShop }) => {
     </div>
   );
 };
+
 export default UpdateShopInfoModal;

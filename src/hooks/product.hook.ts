@@ -2,6 +2,7 @@ import {
   createDuplicateProductIntoDB,
   createProductIntoDB,
   deleteProductFromDB,
+  getAllProductsFromDB,
   getMyProductsFromDB,
   getProductById,
   updateProductIntoDB,
@@ -15,6 +16,7 @@ export const useCreateProduct = () => {
     mutationKey: ["CREATE_PRODUCT"],
     mutationFn: async (productData) => await createProductIntoDB(productData),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["GET_ALL_PRODUCTS"] });
       queryClient.invalidateQueries({ queryKey: ["GET_MY_PRODUCTS"] });
       toast.success("Product created successfully");
     },
@@ -31,6 +33,7 @@ export const useCreateDuplicateProduct = () => {
     mutationFn: async (productData) =>
       await createDuplicateProductIntoDB(productData),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["GET_ALL_PRODUCTS"] });
       queryClient.invalidateQueries({ queryKey: ["GET_MY_PRODUCTS"] });
       toast.success("Product duplicated successfully");
     },
@@ -40,6 +43,12 @@ export const useCreateDuplicateProduct = () => {
   });
 };
 
+export const useGetAllProducts = () => {
+  return useQuery({
+    queryKey: ["GET_ALL_PRODUCTS"],
+    queryFn: async () => await getAllProductsFromDB(),
+  });
+};
 export const useGetMyProducts = () => {
   return useQuery({
     queryKey: ["GET_MY_PRODUCTS"],
@@ -64,6 +73,7 @@ export const useUpdateProduct = () => {
     mutationFn: async ({ id, payload }) =>
       await updateProductIntoDB(id, payload),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["GET_ALL_PRODUCTS"] });
       queryClient.invalidateQueries({ queryKey: ["GET_MY_PRODUCTS"] });
       queryClient.invalidateQueries({ queryKey: ["GET_PRODUCT_BY_ID"] });
       toast.success("Product updated successfully");
@@ -79,6 +89,7 @@ export const useDeleteProduct = () => {
     mutationKey: ["DELETE_PRODUCT"],
     mutationFn: async (id) => await deleteProductFromDB(id),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["GET_ALL_PRODUCTS"] });
       queryClient.invalidateQueries({ queryKey: ["GET_MY_PRODUCTS"] });
       toast.success("Product deleted successfully");
     },

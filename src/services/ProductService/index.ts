@@ -21,6 +21,10 @@ export const createDuplicateProductIntoDB = async (
   return data;
 };
 
+export const getAllProductsFromDB = async () => {
+  const { data } = await axiosInstance.get("/products");
+  return data;
+};
 export const getMyProductsFromDB = async () => {
   const { data } = await axiosInstance.get("/products/my-products");
   return data;

@@ -68,7 +68,9 @@ const columns = [
 ];
 
 const ProductManagement = () => {
-  const [productId, setProductId] = useState("");
+  const [productIdToDuplicate, setProductIdToDuplicate] = useState("");
+  const [productIdToDelete, setProductIdToDelete] = useState("");
+  const [productIdToUpdate, setProductIdToUpdate] = useState("");
   const [status, setStatus] = useState("");
 
   const [quantityValue, setQuantityValue] = useState(0);
@@ -93,7 +95,7 @@ const ProductManagement = () => {
 
   const handleDuplicateProduct = (product: IProduct) => {
     setStatus("Duplicating");
-    setProductId(product?.id);
+    setProductIdToDuplicate(product?.id);
     const productData = {
       name: product?.name,
       description: product?.description,
@@ -111,31 +113,31 @@ const ProductManagement = () => {
 
   const handleDeleteProduct = (id: string) => {
     setStatus("Deleting");
-    setProductId(id);
+    setProductIdToDelete(id);
     deleteProduct(id);
   };
 
   useEffect(() => {
     const handleUpdateQuantity = () => {
-      if (productId && quantityValue !== null && quantityValue >= 0) {
+      if (productIdToUpdate && quantityValue !== null && quantityValue >= 0) {
         updateProduct({
-          id: productId,
+          id: productIdToUpdate,
           payload: { inventoryCount: quantityValue },
         });
       }
     };
     handleUpdateQuantity();
-  }, [quantityValue, updateProduct, productId]);
+  }, [quantityValue, updateProduct, productIdToUpdate]);
 
   useEffect(() => {
     if (isDuplicateProductSuccess) {
       refetch();
-      setProductId("");
+      setProductIdToDuplicate("");
       setStatus("");
     }
     if (isDeleteProductSuccess) {
       refetch();
-      setProductId("");
+      setProductIdToDelete("");
       setStatus("");
     }
   }, [isDuplicateProductSuccess, isDeleteProductSuccess, refetch]);
@@ -194,7 +196,7 @@ const ProductManagement = () => {
                         setQuantityValue(
                           Number((e.target as HTMLInputElement).value)
                         ); // Update quantity
-                        setProductId(product?.id); // Ensure product ID is set
+                        setProductIdToUpdate(product?.id); // Ensure product ID is set
                       }}
                       variant="bordered"
                       type="number"
@@ -213,7 +215,7 @@ const ProductManagement = () => {
                       className="min-w-[75px]"
                     >
                       {isDuplicateProductLoading &&
-                      productId === product?.id &&
+                      productIdToDuplicate === product?.id &&
                       status === "Duplicating" ? (
                         <Spinner color="white" size="sm" />
                       ) : (
@@ -236,7 +238,7 @@ const ProductManagement = () => {
                       color="danger"
                     >
                       {isDeleteProductLoading &&
-                      productId === product?.id &&
+                      productIdToDelete === product?.id &&
                       status === "Deleting" ? (
                         <Spinner color="white" size="sm" />
                       ) : (

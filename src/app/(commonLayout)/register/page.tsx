@@ -40,7 +40,7 @@ const RegisterPage = () => {
       if (redirect) {
         router.push(redirect);
       } else if (userData?.data?.user?.role === "VENDOR") {
-        router.push("/vendor/dashboard");
+        router.push("/vendor/shop");
       } else {
         router.push("/");
       }
