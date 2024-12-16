@@ -21,10 +21,16 @@ export const createDuplicateProductIntoDB = async (
   return data;
 };
 
-export const getAllProductsFromDB = async () => {
-  const { data } = await axiosInstance.get("/products");
+export const getAllProductsFromDB = async (query?: string) => {
+  console.log(`/products${query}`);
+  const { data } = await axiosInstance.get(`/products${query}`);
   return data;
 };
+export const getFlashSaleProductsFromDB = async () => {
+  const { data } = await axiosInstance.get(`/products/flash-sales`);
+  return data;
+};
+
 export const getMyProductsFromDB = async () => {
   const { data } = await axiosInstance.get("/products/my-products");
   return data;

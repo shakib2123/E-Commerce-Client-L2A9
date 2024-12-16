@@ -3,6 +3,7 @@ import {
   createProductIntoDB,
   deleteProductFromDB,
   getAllProductsFromDB,
+  getFlashSaleProductsFromDB,
   getMyProductsFromDB,
   getProductById,
   updateProductIntoDB,
@@ -17,6 +18,7 @@ export const useCreateProduct = () => {
     mutationFn: async (productData) => await createProductIntoDB(productData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_ALL_PRODUCTS"] });
+      queryClient.invalidateQueries({ queryKey: ["GET_FLASH_SALE_PRODUCTS"] });
       queryClient.invalidateQueries({ queryKey: ["GET_MY_PRODUCTS"] });
       toast.success("Product created successfully");
     },
@@ -34,6 +36,7 @@ export const useCreateDuplicateProduct = () => {
       await createDuplicateProductIntoDB(productData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_ALL_PRODUCTS"] });
+      queryClient.invalidateQueries({ queryKey: ["GET_FLASH_SALE_PRODUCTS"] });
       queryClient.invalidateQueries({ queryKey: ["GET_MY_PRODUCTS"] });
       toast.success("Product duplicated successfully");
     },
@@ -43,12 +46,20 @@ export const useCreateDuplicateProduct = () => {
   });
 };
 
-export const useGetAllProducts = () => {
+export const useGetAllProducts = (query?: string) => {
   return useQuery({
     queryKey: ["GET_ALL_PRODUCTS"],
-    queryFn: async () => await getAllProductsFromDB(),
+    queryFn: async () => await getAllProductsFromDB(query),
   });
 };
+
+export const useGetFlashSaleProducts = () => {
+  return useQuery({
+    queryKey: ["GET_FLASH_SALE_PRODUCTS"],
+    queryFn: async () => await getFlashSaleProductsFromDB(),
+  });
+};
+
 export const useGetMyProducts = () => {
   return useQuery({
     queryKey: ["GET_MY_PRODUCTS"],
@@ -74,6 +85,7 @@ export const useUpdateProduct = () => {
       await updateProductIntoDB(id, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_ALL_PRODUCTS"] });
+      queryClient.invalidateQueries({ queryKey: ["GET_FLASH_SALE_PRODUCTS"] });
       queryClient.invalidateQueries({ queryKey: ["GET_MY_PRODUCTS"] });
       queryClient.invalidateQueries({ queryKey: ["GET_PRODUCT_BY_ID"] });
       toast.success("Product updated successfully");
@@ -90,6 +102,7 @@ export const useDeleteProduct = () => {
     mutationFn: async (id) => await deleteProductFromDB(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_ALL_PRODUCTS"] });
+      queryClient.invalidateQueries({ queryKey: ["GET_FLASH_SALE_PRODUCTS"] });
       queryClient.invalidateQueries({ queryKey: ["GET_MY_PRODUCTS"] });
       toast.success("Product deleted successfully");
     },

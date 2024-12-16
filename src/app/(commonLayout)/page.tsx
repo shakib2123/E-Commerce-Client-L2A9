@@ -1,4 +1,5 @@
 "use client";
+import FlashSaleProducts from "@/components/home/FlashSaleProducts";
 import Categories from "@/components/shared/Categories";
 import ProductCard from "@/components/shared/ProductCard";
 import ScrollToTopButton from "@/components/shared/ScrollTopButton";
@@ -8,20 +9,40 @@ import { useGetAllProducts } from "@/hooks/product.hook";
 import { ICategory, IProduct } from "@/types";
 import { Input, Select, SelectItem, Tooltip } from "@nextui-org/react";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaArrowRotateLeft } from "react-icons/fa6";
 
 const HomePage = () => {
   const [searchValue, setSearchValue] = useState("");
-  const [filterValue, setFilterValue] = useState("");
+  const [categoryId, setCategoryId] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
+  const [resetForm, setResetForm] = useState(false);
   const debouncedSearchValue = useDebounce(searchValue);
+
+  const buildQuery = () => {
+    const queryParams: string[] = [];
+
+    if (debouncedSearchValue)
+      queryParams.push(`searchTerm=${debouncedSearchValue}`);
+    if (categoryId) queryParams.push(`categoryId=${categoryId}`);
+    if (minPrice) queryParams.push(`minPrice=${minPrice}`);
+    if (maxPrice) queryParams.push(`maxPrice=${maxPrice}`);
+    return queryParams.length ? `?${queryParams.join("&")}` : "";
+  };
 
   const { data: categories, isLoading: isCategoryLoading } =
     useGetAllCategories();
 
-  const { data: products, isLoading: isProductLoading } = useGetAllProducts();
+  const {
+    data: products,
+    isLoading: isProductLoading,
+    refetch,
+  } = useGetAllProducts(buildQuery());
+
+  useEffect(() => {
+    refetch();
+  }, [refetch, debouncedSearchValue, minPrice, maxPrice, categoryId]);
 
   console.log(products);
 
@@ -46,7 +67,7 @@ const HomePage = () => {
             />
 
             <Select
-              onChange={(e) => setFilterValue(e.target.value)}
+              onChange={(e) => setCategoryId(e.target.value)}
               label="Filter by"
               size="sm"
               variant="faded"
@@ -78,7 +99,15 @@ const HomePage = () => {
               onChange={(e) => setMaxPrice(e.target.value)}
             />
             <Tooltip content="Reset Filters">
-              <button className="p-3 text-gray-700 rounded-xl bg-gray-100">
+              <button
+                onClick={() => {
+                  setCategoryId("");
+                  setMaxPrice("");
+                  setMinPrice("");
+                  setSearchValue("");
+                }}
+                className="p-3 text-gray-700 rounded-xl bg-gray-100"
+              >
                 <FaArrowRotateLeft className="text-xl" />
               </button>
             </Tooltip>
@@ -88,6 +117,8 @@ const HomePage = () => {
 
       {/* Categories */}
       <Categories />
+
+      <FlashSaleProducts />
 
       {/* products */}
       <div className="py-8">
