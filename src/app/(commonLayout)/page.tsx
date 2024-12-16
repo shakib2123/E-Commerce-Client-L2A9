@@ -1,17 +1,21 @@
 "use client";
+import Categories from "@/components/shared/Categories";
+import ProductCard from "@/components/shared/ProductCard";
 import ScrollToTopButton from "@/components/shared/ScrollTopButton";
 import { useGetAllCategories } from "@/hooks/category.hook";
 import useDebounce from "@/hooks/debounce.hook";
 import { useGetAllProducts } from "@/hooks/product.hook";
-import { ICategory } from "@/types";
+import { ICategory, IProduct } from "@/types";
 import { Input, Select, SelectItem, Tooltip } from "@nextui-org/react";
+
 import { useState } from "react";
 import { FaArrowRotateLeft } from "react-icons/fa6";
 
 const HomePage = () => {
-  const [sortValue, setSortValue] = useState("");
   const [searchValue, setSearchValue] = useState("");
   const [filterValue, setFilterValue] = useState("");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
   const debouncedSearchValue = useDebounce(searchValue);
 
   const { data: categories, isLoading: isCategoryLoading } =
@@ -37,7 +41,7 @@ const HomePage = () => {
               size="sm"
               variant="faded"
               label="Search"
-              className="text-gray-800 lg:w-[70%]"
+              className="text-gray-800 lg:w-[70%] flex-1"
               onChange={(e) => setSearchValue(e.target.value)}
             />
 
@@ -47,7 +51,7 @@ const HomePage = () => {
               size="sm"
               variant="faded"
               placeholder="Select Category"
-              className="md:max-w-xs"
+              className="md:max-w-xs flex-1"
               isDisabled={isCategoryLoading}
             >
               {categoryData?.map((category: { key: string; label: string }) => (
@@ -63,7 +67,7 @@ const HomePage = () => {
               variant="faded"
               label="Min Price"
               className="text-gray-800"
-              // onChange={(e) => setSearchValue(e.target.value)}
+              onChange={(e) => setMinPrice(e.target.value)}
             />
             <Input
               name="maxPrice"
@@ -71,7 +75,7 @@ const HomePage = () => {
               variant="faded"
               label="Max Price"
               className="text-gray-800"
-              // onChange={(e) => setSearchValue(e.target.value)}
+              onChange={(e) => setMaxPrice(e.target.value)}
             />
             <Tooltip content="Reset Filters">
               <button className="p-3 text-gray-700 rounded-xl bg-gray-100">
@@ -79,6 +83,19 @@ const HomePage = () => {
               </button>
             </Tooltip>
           </div>
+        </div>
+      </div>
+
+      {/* Categories */}
+      <Categories />
+
+      {/* products */}
+      <div className="py-8">
+        <h2 className="text-xl md:text-2xl font-medium mb-1">Products</h2>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4">
+          {products?.data?.map((product: IProduct) => (
+            <ProductCard product={product} key={product.id} />
+          ))}
         </div>
       </div>
     </section>

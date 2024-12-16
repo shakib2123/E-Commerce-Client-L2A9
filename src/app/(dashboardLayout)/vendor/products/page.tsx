@@ -1,5 +1,6 @@
 "use client";
 
+import FlashSaleModal from "@/components/modals/FlashSaleModal";
 import {
   useCreateDuplicateProduct,
   useDeleteProduct,
@@ -71,6 +72,8 @@ const ProductManagement = () => {
   const [productIdToDuplicate, setProductIdToDuplicate] = useState("");
   const [productIdToDelete, setProductIdToDelete] = useState("");
   const [productIdToUpdate, setProductIdToUpdate] = useState("");
+  const [productIdToRemoveFlashSale, setProductIdToRemoveFlashSale] =
+    useState("");
   const [status, setStatus] = useState("");
 
   const [quantityValue, setQuantityValue] = useState(0);
@@ -78,6 +81,11 @@ const ProductManagement = () => {
   const router = useRouter();
 
   const { data: products, isLoading, isSuccess, refetch } = useGetMyProducts();
+
+  const {
+    mutate: updateProductFlashSale,
+    isPending: isProductRemovingFromFlashSale,
+  } = useUpdateProduct();
 
   const {
     mutate: createDuplicateProduct,
@@ -92,6 +100,17 @@ const ProductManagement = () => {
   } = useDeleteProduct();
 
   const { mutate: updateProduct } = useUpdateProduct();
+
+  const handleRemoveFlashSaleProduct = (product: IProduct) => {
+    setStatus("RemoveFlashSale");
+    setProductIdToRemoveFlashSale(product?.id);
+    const productData = {
+      isFlashSale: false,
+      flashSalePrice: 0,
+    };
+
+    updateProductFlashSale({ id: product?.id, payload: productData });
+  };
 
   const handleDuplicateProduct = (product: IProduct) => {
     setStatus("Duplicating");
@@ -195,8 +214,8 @@ const ProductManagement = () => {
                       onBlur={(e) => {
                         setQuantityValue(
                           Number((e.target as HTMLInputElement).value)
-                        ); // Update quantity
-                        setProductIdToUpdate(product?.id); // Ensure product ID is set
+                        );
+                        setProductIdToUpdate(product?.id);
                       }}
                       variant="bordered"
                       type="number"
@@ -208,6 +227,24 @@ const ProductManagement = () => {
                   </TableCell>
 
                   <TableCell className="min-w-full flex gap-2">
+                    {product?.isFlashSale ? (
+                      <Button
+                        onClick={() => handleRemoveFlashSaleProduct(product)}
+                        size="sm"
+                        color="primary"
+                        className="min-w-[75px]"
+                      >
+                        {isProductRemovingFromFlashSale &&
+                        productIdToRemoveFlashSale === product?.id &&
+                        status === "RemoveFlashSale" ? (
+                          <Spinner color="white" size="sm" />
+                        ) : (
+                          "Remove Flash Sale"
+                        )}
+                      </Button>
+                    ) : (
+                      <FlashSaleModal productId={product?.id} />
+                    )}
                     <Button
                       onClick={() => handleDuplicateProduct(product)}
                       size="sm"
