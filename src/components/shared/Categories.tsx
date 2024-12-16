@@ -10,7 +10,7 @@ const Categories = () => {
     <div className="max-w-screen-xl mx-auto">
       <h2 className="text-xl md:text-2xl font-medium mb-1">Categories</h2>
       {isLoading ? (
-        <div className="flex items-center justify-center min-h-80">
+        <div className="flex items-center justify-center min-h-48">
           <Spinner size="lg" />
         </div>
       ) : (

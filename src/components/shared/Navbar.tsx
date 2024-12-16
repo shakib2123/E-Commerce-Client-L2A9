@@ -88,6 +88,28 @@ export default function Navbar() {
           >
             Shop
           </Link>
+          <Link
+            href="/all-products"
+            aria-current="page"
+            className={
+              pathname === "/all-products"
+                ? "text-white border-b-2 font-medium border-white duration-100 transition-colors hover:text-gray-200/90"
+                : "text-gray-200 hover:text-gray-200/90"
+            }
+          >
+            All Products
+          </Link>
+          <Link
+            href="/flash-sales"
+            aria-current="page"
+            className={
+              pathname === "/flash-sales"
+                ? "text-white border-b-2 font-medium border-white duration-100 transition-colors hover:text-gray-200/90"
+                : "text-gray-200 hover:text-gray-200/90"
+            }
+          >
+            Flash Sales
+          </Link>
         </ul>
       </NavbarContent>
 
@@ -139,38 +161,82 @@ export default function Navbar() {
             </Link>
           </NavbarMenuItem>
           <NavbarMenuItem>
-            <Link href="/profile" aria-current="page" className="w-full h-full">
-              <Button
-                color={pathname === "/profile" ? "primary" : "default"}
-                className="w-full h-full"
-              >
-                Profile
-              </Button>
-            </Link>
-          </NavbarMenuItem>
-
-          <NavbarMenuItem>
-            <Link href={`${userRole}/dashboard`} className="w-full h-full">
-              <Button
-                color={
-                  pathname === `${userRole}/dashboard` ? "primary" : "default"
-                }
-                className="w-full h-full"
-              >
-                Dashboard
-              </Button>
-            </Link>
-          </NavbarMenuItem>
-
-          <NavbarMenuItem>
-            <Button
-              onClick={() => handleLogout()}
-              className="text-gray-50 w-full"
-              color="danger"
+            <Link
+              href="/all-products"
+              aria-current="page"
+              className="w-full h-full"
             >
-              Logout
-            </Button>
+              <Button
+                color={pathname === "/all-products" ? "primary" : "default"}
+                className="w-full h-full"
+              >
+                All Products
+              </Button>
+            </Link>
           </NavbarMenuItem>
+          <NavbarMenuItem>
+            <Link
+              href="/flash-sales"
+              aria-current="page"
+              className="w-full h-full"
+            >
+              <Button
+                color={pathname === "/flash-sales" ? "primary" : "default"}
+                className="w-full h-full"
+              >
+                Flash Sales
+              </Button>
+            </Link>
+          </NavbarMenuItem>
+          {user && (
+            <NavbarMenuItem>
+              <Link
+                href="/profile"
+                aria-current="page"
+                className="w-full h-full"
+              >
+                <Button
+                  color={pathname === "/profile" ? "primary" : "default"}
+                  className="w-full h-full"
+                >
+                  Profile
+                </Button>
+              </Link>
+            </NavbarMenuItem>
+          )}
+
+          {user && (
+            <NavbarMenuItem>
+              <Link href={`${userRole}/dashboard`} className="w-full h-full">
+                <Button
+                  color={
+                    pathname === `${userRole}/dashboard` ? "primary" : "default"
+                  }
+                  className="w-full h-full"
+                >
+                  Dashboard
+                </Button>
+              </Link>
+            </NavbarMenuItem>
+          )}
+
+          {user ? (
+            <NavbarMenuItem>
+              <Button
+                onClick={() => handleLogout()}
+                className="text-gray-50 w-full"
+                color="danger"
+              >
+                Logout
+              </Button>
+            </NavbarMenuItem>
+          ) : (
+            <Link href={"/login"}>
+              <Button color="primary" className="w-full">
+                Login
+              </Button>
+            </Link>
+          )}
         </div>
       </NavbarMenu>
     </NextUINavbar>

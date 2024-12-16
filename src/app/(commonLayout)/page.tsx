@@ -7,7 +7,7 @@ import { useGetAllCategories } from "@/hooks/category.hook";
 import useDebounce from "@/hooks/debounce.hook";
 import { useGetAllProducts } from "@/hooks/product.hook";
 import { ICategory, IProduct } from "@/types";
-import { Input, Select, SelectItem, Tooltip } from "@nextui-org/react";
+import { Input, Select, SelectItem, Spinner, Tooltip } from "@nextui-org/react";
 
 import { useEffect, useState } from "react";
 import { FaArrowRotateLeft } from "react-icons/fa6";
@@ -17,7 +17,6 @@ const HomePage = () => {
   const [categoryId, setCategoryId] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
-  const [resetForm, setResetForm] = useState(false);
   const debouncedSearchValue = useDebounce(searchValue);
 
   const buildQuery = () => {
@@ -123,11 +122,17 @@ const HomePage = () => {
       {/* products */}
       <div className="py-8">
         <h2 className="text-xl md:text-2xl font-medium mb-1">Products</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4">
-          {products?.data?.map((product: IProduct) => (
-            <ProductCard product={product} key={product.id} />
-          ))}
-        </div>
+        {isProductLoading ? (
+          <div className="flex items-center justify-center min-h-80">
+            <Spinner size="lg" />
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4">
+            {products?.data?.map((product: IProduct) => (
+              <ProductCard product={product} key={product.id} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
