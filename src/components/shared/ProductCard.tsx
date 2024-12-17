@@ -1,9 +1,14 @@
+import { addToCart } from "@/services/CartService";
 import { IProduct } from "@/types";
 import { Button } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
 
 const ProductCard = ({ product }: { product: IProduct }) => {
+  const handleAddToCart = () => {
+    addToCart(product);
+  };
+
   return (
     <div
       key={product.id}
@@ -31,11 +36,21 @@ const ProductCard = ({ product }: { product: IProduct }) => {
         <p className="text-gray-600 text-xs md:text-sm">
           Category: {product.category?.name}
         </p>
-        <Link href={`/all-products/${product.id}`}>
-          <Button color="primary" className="w-full mt-3">
-            Quick View
+        <div>
+          <Button
+            onClick={handleAddToCart}
+            color="primary"
+            className="w-full mt-3 bg-orange-600"
+          >
+            Add To Cart
           </Button>
-        </Link>
+
+          <Link href={`/all-products/${product.id}`}>
+            <Button color="primary" className="w-full mt-3">
+              Quick View
+            </Button>
+          </Link>
+        </div>
       </div>
     </div>
   );
