@@ -16,7 +16,6 @@ interface IProps {
 
 const VendorShop = ({ params: { shopId } }: IProps) => {
   const { data: shop, refetch } = useGetShopById(shopId);
-
   const {
     data: products,
     isLoading: isProductLoading,
@@ -56,9 +55,11 @@ const VendorShop = ({ params: { shopId } }: IProps) => {
             <p className="text-sm">
               {shop?.data?.followedShop.length || 0} followers
             </p>
-            <Button className="mt-2 w-[90px]" size="sm">
-              Follow
-            </Button>
+            {shop?.data?.user?.email !== shop?.data?.email && (
+              <Button className="mt-2 w-[90px]" size="sm">
+                Follow
+              </Button>
+            )}
           </div>
         </div>
       </div>

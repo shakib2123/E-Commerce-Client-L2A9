@@ -21,6 +21,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import NavbarDropdown from "./NavbarDropdown";
 import { protectedRoutes } from "@/constant/constant";
+import { FaCartShopping } from "react-icons/fa6";
 
 export default function Navbar() {
   const router = useRouter();
@@ -77,17 +78,20 @@ export default function Navbar() {
           >
             Home
           </Link>
-          <Link
-            href="/shop"
-            aria-current="page"
-            className={
-              pathname === "/shop"
-                ? "text-white border-b-2 font-medium border-white duration-100 transition-colors hover:text-gray-200/90"
-                : "text-gray-200 hover:text-gray-200/90"
-            }
-          >
-            Shop
-          </Link>
+
+          {userRole === "vendor" && (
+            <Link
+              href="/shop"
+              aria-current="page"
+              className={
+                pathname === "/shop"
+                  ? "text-white border-b-2 font-medium border-white duration-100 transition-colors hover:text-gray-200/90"
+                  : "text-gray-200 hover:text-gray-200/90"
+              }
+            >
+              Shop
+            </Link>
+          )}
 
           <Link
             href="/all-products"
@@ -118,6 +122,11 @@ export default function Navbar() {
         className="hidden sm:flex basis-1/5 sm:basis-full"
         justify="end"
       >
+        <NavbarItem className="hidden sm:flex gap-2">
+          <Link href={"/cart"} className="p-2 rounded-lg">
+            <FaCartShopping className="text-gray-50 hover:text-gray-200 text-2xl" />
+          </Link>
+        </NavbarItem>
         {user?.email ? (
           <NavbarItem className="hidden sm:flex gap-2">
             <NavbarDropdown />
@@ -135,6 +144,9 @@ export default function Navbar() {
         className="sm:hidden basis-1 pl-4 text-white"
         justify="end"
       >
+        <Link href={"/cart"} className="p-2 rounded-lg">
+          <FaCartShopping className="text-gray-50 hover:text-gray-200 text-2xl" />
+        </Link>
         <NavbarMenuToggle />
       </NavbarContent>
 
@@ -150,16 +162,18 @@ export default function Navbar() {
               </Button>
             </Link>
           </NavbarMenuItem>
-          <NavbarMenuItem>
-            <Link href="/shop" className="w-full h-full">
-              <Button
-                color={pathname === "/shop" ? "primary" : "default"}
-                className="w-full h-full"
-              >
-                Shop
-              </Button>
-            </Link>
-          </NavbarMenuItem>
+          {userRole === "vendor" && (
+            <NavbarMenuItem>
+              <Link href="/shop" className="w-full h-full">
+                <Button
+                  color={pathname === "/shop" ? "primary" : "default"}
+                  className="w-full h-full"
+                >
+                  Shop
+                </Button>
+              </Link>
+            </NavbarMenuItem>
+          )}
 
           <NavbarMenuItem>
             <Link
