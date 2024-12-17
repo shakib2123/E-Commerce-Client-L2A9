@@ -25,7 +25,7 @@ const UpdateShopInfoModal = ({ shop }: { shop: IShop }) => {
       <CMModal
         title="Edit Shop Information"
         buttonText="Edit"
-        buttonColor="default"
+        buttonColor="primary"
         buttonSize="sm"
         closeModal={isSuccess && !isShopUpdating}
       >

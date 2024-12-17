@@ -77,6 +77,17 @@ export default function Navbar() {
           >
             Home
           </Link>
+          <Link
+            href="/shop"
+            aria-current="page"
+            className={
+              pathname === "/shop"
+                ? "text-white border-b-2 font-medium border-white duration-100 transition-colors hover:text-gray-200/90"
+                : "text-gray-200 hover:text-gray-200/90"
+            }
+          >
+            Shop
+          </Link>
 
           <Link
             href="/all-products"
@@ -136,6 +147,16 @@ export default function Navbar() {
                 className="w-full h-full"
               >
                 Home
+              </Button>
+            </Link>
+          </NavbarMenuItem>
+          <NavbarMenuItem>
+            <Link href="/shop" className="w-full h-full">
+              <Button
+                color={pathname === "/shop" ? "primary" : "default"}
+                className="w-full h-full"
+              >
+                Shop
               </Button>
             </Link>
           </NavbarMenuItem>

@@ -20,7 +20,11 @@ export default function ImageGallery({ images }: IProps) {
   return (
     <LightGallery
       elementClassNames={` mt-2 gap-1 grid place-items-center
-       ${images?.length === 1 ? "grid-cols-1" : "grid-cols-2"} `}
+       ${
+         images?.length === 1 || images?.length === 2
+           ? "grid-cols-1"
+           : "grid-cols-2"
+       } `}
       speed={500}
       plugins={[lgThumbnail, lgZoom]}
     >
@@ -33,7 +37,13 @@ export default function ImageGallery({ images }: IProps) {
           href={image}
         >
           <Image
-            className="h-[300px] w-full object-cover"
+            className={`${
+              images?.length === 1
+                ? "h-[300px] md:h-[600px]"
+                : images?.length === 2
+                ? "max-h-[150px] md:max-h-[300px]"
+                : "h-[150px] md:h-[300px]"
+            } w-full object-cover`}
             src={image}
             height={500}
             width={500}

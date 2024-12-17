@@ -43,6 +43,7 @@ export interface IShop {
   name: string;
   description: string;
   logo: string;
+  bannerImage: string;
   email: string;
   isBlocked: boolean;
   isDeleted: boolean;
@@ -92,9 +93,9 @@ export interface IOrder {
 export interface IReview {
   id: string;
   productId: string;
-  product: IProduct;
+  product?: IProduct;
   userId: string;
-  user: string;
+  user?: IUser;
   rating: number;
   comment?: string;
   createdAt: string;

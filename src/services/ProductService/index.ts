@@ -35,6 +35,10 @@ export const getMyProductsFromDB = async () => {
   const { data } = await axiosInstance.get("/products/my-products");
   return data;
 };
+export const getShopProductsFromDB = async (id: string) => {
+  const { data } = await axiosInstance.get(`/products/shop-products/${id}`);
+  return data;
+};
 
 export const getProductById = async (id: string) => {
   const { data } = await axiosInstance.get(`/products/${id}`);

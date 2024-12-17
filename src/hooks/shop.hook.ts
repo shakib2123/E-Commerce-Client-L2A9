@@ -1,6 +1,8 @@
 import {
   getAllShopsFromDB,
   getMyShopFromDB,
+  getShopByIdFromDB,
+  updateShopBannerImageIntoDB,
   updateShopImageIntoDB,
   updateShopIntoDB,
 } from "@/services/ShopService";
@@ -16,10 +18,16 @@ export const useGetAllShops = () => {
   });
 };
 
-export const useGetMyShop = () => {
+export const useGetShopById = (id: string) => {
+  return useQuery({
+    queryKey: ["GET_SHOP_BY_ID"],
+    queryFn: async () => await getShopByIdFromDB(id),
+  });
+};
+export const useGetMyShop = (email: string) => {
   return useQuery({
     queryKey: ["My_SHOP"],
-    queryFn: async () => await getMyShopFromDB(),
+    queryFn: async () => await getMyShopFromDB(email),
   });
 };
 
@@ -31,6 +39,7 @@ export const useUpdateShop = () => {
       await updateShopIntoDB(id, shopData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["ALL_SHOPS"] });
+      queryClient.invalidateQueries({ queryKey: ["GET_SHOP_BY_ID"] });
       queryClient.invalidateQueries({ queryKey: ["My_SHOP"] });
       toast.success("Shop updated successfully.");
     },
@@ -47,8 +56,26 @@ export const useUpdateShopImage = () => {
       await updateShopImageIntoDB(id, formData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["ALL_SHOPS"] });
+      queryClient.invalidateQueries({ queryKey: ["GET_SHOP_BY_ID"] });
       queryClient.invalidateQueries({ queryKey: ["My_SHOP"] });
       toast.success("Shop image updated successfully.");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+};
+export const useUpdateShopBannerImage = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, { id: string; formData: FormData }>({
+    mutationKey: ["UPDATE_SHOP_BANNER_IMAGE"],
+    mutationFn: async ({ id, formData }) =>
+      await updateShopBannerImageIntoDB(id, formData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["ALL_SHOPS"] });
+      queryClient.invalidateQueries({ queryKey: ["GET_SHOP_BY_ID"] });
+      queryClient.invalidateQueries({ queryKey: ["My_SHOP"] });
+      toast.success("Shop banner image updated successfully.");
     },
     onError: (error) => {
       toast.error(error.message);

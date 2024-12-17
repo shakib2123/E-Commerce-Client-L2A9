@@ -7,9 +7,10 @@ import { useUserLogin } from "@/hooks/auth.hook";
 import loginValidationSchema from "@/schemas/login.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Spinner } from "@nextui-org/react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 
 const LoginPage = () => {
@@ -41,52 +42,54 @@ const LoginPage = () => {
   const registerURL = redirect ? `/register?redirect=${redirect}` : "/register";
 
   return (
-    <section className="min-h-[calc(100vh-70px)] h-full overflow-y-auto flex items-center justify-center py-8">
-      <div className="flex w-[90%] md:w-[35%] flex-col items-center justify-center border shadow-lg rounded-lg p-4 md:p-8">
-        <h3 className="my-2 text-lg md:text-2xl font-bold ">
-          Login with ClickMart
-        </h3>
-        <p className="mb-4">Welcome Back! Let&lsquo;s Get Started.</p>
-        <div className="w-full">
-          <CMForm
-            resolver={zodResolver(loginValidationSchema)}
-            onSubmit={onSubmit}
-          >
-            <div className="py-3 text-gray-900">
-              <CMInput label="Email" name="email" type="email" />
-            </div>
-            <div className="py-3 text-gray-900 flex flex-col gap-2">
-              <CMInput label="Password" name="password" type="password" />
-              <Link
-                href="/forgot-password"
-                className="hover:text-primary hover:underline text-sm"
+    <Suspense fallback={<div>Loading...</div>}>
+      <section className="min-h-[calc(100vh-70px)] h-full overflow-y-auto flex items-center justify-center py-8">
+        <div className="flex w-[90%] md:w-[35%] flex-col items-center justify-center border shadow-lg rounded-lg p-4 md:p-8">
+          <h3 className="my-2 text-lg md:text-2xl font-bold ">
+            Login with ClickMart
+          </h3>
+          <p className="mb-4">Welcome Back! Let&lsquo;s Get Started.</p>
+          <div className="w-full">
+            <CMForm
+              resolver={zodResolver(loginValidationSchema)}
+              onSubmit={onSubmit}
+            >
+              <div className="py-3 text-gray-900">
+                <CMInput label="Email" name="email" type="email" />
+              </div>
+              <div className="py-3 text-gray-900 flex flex-col gap-2">
+                <CMInput label="Password" name="password" type="password" />
+                <Link
+                  href="/forgot-password"
+                  className="hover:text-primary hover:underline text-sm"
+                >
+                  Forgot Password?
+                </Link>
+              </div>
+
+              <Button
+                color="primary"
+                className="mt-1 mb-3 w-full"
+                size="lg"
+                type="submit"
               >
-                Forgot Password?
+                {isPending ? <Spinner size="sm" color="white" /> : "Login"}
+              </Button>
+            </CMForm>
+            <div className="text-center text-sm">
+              Don&lsquo;t have account ?{" "}
+              <Link
+                href={registerURL}
+                className="font-semibold hover:text-primary"
+              >
+                Register
               </Link>
             </div>
-
-            <Button
-              color="primary"
-              className="mt-1 mb-3 w-full"
-              size="lg"
-              type="submit"
-            >
-              {isPending ? <Spinner size="sm" color="white" /> : "Login"}
-            </Button>
-          </CMForm>
-          <div className="text-center text-sm">
-            Don&lsquo;t have account ?{" "}
-            <Link
-              href={registerURL}
-              className="font-semibold hover:text-primary"
-            >
-              Register
-            </Link>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </Suspense>
   );
 };
 
-export default LoginPage;
+export default dynamic(() => Promise.resolve(LoginPage), { ssr: false });

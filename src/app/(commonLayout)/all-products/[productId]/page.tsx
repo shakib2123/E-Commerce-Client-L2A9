@@ -1,13 +1,18 @@
 "use client";
 
 import ImageGallery from "@/components/shared/ImageGallery";
-import { useGetProductById } from "@/hooks/product.hook";
+import ProductCard from "@/components/shared/ProductCard";
+import { useGetAllProducts, useGetProductById } from "@/hooks/product.hook";
 import { addToCart } from "@/services/CartService";
-import { IProduct } from "@/types";
-import { Button } from "@nextui-org/react";
-import { User } from "@nextui-org/user";
-import Image from "next/image";
+import { IOrder, IProduct, IReview } from "@/types";
+import { Button, Spinner, User } from "@nextui-org/react";
 import Link from "next/link";
+import { useEffect } from "react";
+
+import { Rating } from "@smastrom/react-rating";
+
+import "@smastrom/react-rating/style.css";
+import { useGetCurrentUser } from "@/hooks/user.hook";
 
 interface IProps {
   params: {
@@ -16,25 +21,43 @@ interface IProps {
 }
 
 const ProductDetails = ({ params: { productId } }: IProps) => {
-  const { data: product, isLoading: isProductLoading } =
-    useGetProductById(productId);
-
-  console.log(product);
+  // const [rating, setRating] = useState(0);
+  const { data: product } = useGetProductById(productId);
 
   const handleAddToCart = (product: IProduct) => {
     addToCart(product);
   };
 
+  const query = `?categoryId=${product?.data?.categoryId}`;
+
+  const {
+    data: products,
+    isLoading: isProductsLoading,
+    refetch,
+  } = useGetAllProducts(query);
+
+  const { data: userInfo } = useGetCurrentUser();
+
+  useEffect(() => {
+    if (product?.success) {
+      refetch();
+    }
+  }, [refetch, query, product, productId]);
+
+  const isAbleToAddReview = !product?.data?.orderItem?.find(
+    (order: IOrder) => order?.userId === userInfo?.data?.id
+  );
+
   return (
     <section className="max-w-screen-xl mx-auto px-3 py-4">
-      <div className="flex gap-4">
+      <div className="flex flex-col lg:flex-row gap-4">
         <div className="rounded-lg overflow-hidden w-full">
           <ImageGallery images={product?.data?.images} />
         </div>
         <div className="flex flex-col justify-between w-full gap-2 my-4">
           <div>
             <Link
-              href={`/shops/${product?.data?.shop?.id}`}
+              href={`/shop/${product?.data?.shop?.id}`}
               className=" rounded-lg text-primary hover:text-orange-600 w-fit hover:underline "
             >
               Visit the {product?.data?.shop?.name || "Unknown"} store
@@ -74,6 +97,67 @@ const ProductDetails = ({ params: { productId } }: IProps) => {
             color="primary"
           >
             Add To Cart
+          </Button>
+        </div>
+      </div>
+
+      {/* related products */}
+      <div className="py-12">
+        <h2 className="text-xl md:text-2xl font-medium mb-1">
+          Related products
+        </h2>
+        {isProductsLoading ? (
+          <div className="flex items-center justify-center min-h-80">
+            <Spinner size="lg" />
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4">
+            {products?.data?.map((product: IProduct) => (
+              <ProductCard product={product} key={product.id} />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* review and ratings */}
+      <div>
+        <h2 className="text-xl md:text-2xl font-medium mb-1">Review</h2>
+        <div className="bg-primary-50 rounded-lg">
+          {product?.data?.reviews?.length > 0 ? (
+            product?.data?.reviews?.map((review: IReview) => (
+              <div key={review?.id} className="border p-2 rounded-lg">
+                <div>
+                  <User
+                    name={review?.user?.name}
+                    avatarProps={{
+                      src: review?.user?.profilePhoto,
+                    }}
+                  />
+                </div>
+                <div className="mt-2">
+                  <Rating
+                    style={{ maxWidth: 100 }}
+                    value={review?.rating || 0}
+                  />
+                  <p className="mt-1">{review?.comment}</p>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="flex items-center justify-center text-gray-700 min-h-24">
+              <p>No review or comment found!</p>
+            </div>
+          )}
+        </div>
+
+        <div className="flex justify-end mt-2">
+          <Button
+            onClick={() => {}}
+            isDisabled={!isAbleToAddReview}
+            color="primary"
+            className=""
+          >
+            Add review
           </Button>
         </div>
       </div>

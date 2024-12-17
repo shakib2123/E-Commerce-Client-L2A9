@@ -6,6 +6,7 @@ import {
   getFlashSaleProductsFromDB,
   getMyProductsFromDB,
   getProductById,
+  getShopProductsFromDB,
   updateProductIntoDB,
 } from "@/services/ProductService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -36,6 +37,7 @@ export const useCreateDuplicateProduct = () => {
       await createDuplicateProductIntoDB(productData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_ALL_PRODUCTS"] });
+      queryClient.invalidateQueries({ queryKey: ["GET_SHOP_PRODUCTS"] });
       queryClient.invalidateQueries({ queryKey: ["GET_FLASH_SALE_PRODUCTS"] });
       queryClient.invalidateQueries({ queryKey: ["GET_MY_PRODUCTS"] });
       toast.success("Product duplicated successfully");
@@ -66,6 +68,13 @@ export const useGetMyProducts = () => {
     queryFn: async () => await getMyProductsFromDB(),
   });
 };
+
+export const useGetShopProducts = (id: string) => {
+  return useQuery({
+    queryKey: ["GET_SHOP_PRODUCTS"],
+    queryFn: async () => await getShopProductsFromDB(id),
+  });
+};
 export const useGetProductById = (id: string) => {
   return useQuery({
     queryKey: ["GET_PRODUCT_BY_ID"],
@@ -85,6 +94,7 @@ export const useUpdateProduct = () => {
       await updateProductIntoDB(id, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_ALL_PRODUCTS"] });
+      queryClient.invalidateQueries({ queryKey: ["GET_SHOP_PRODUCTS"] });
       queryClient.invalidateQueries({ queryKey: ["GET_FLASH_SALE_PRODUCTS"] });
       queryClient.invalidateQueries({ queryKey: ["GET_MY_PRODUCTS"] });
       queryClient.invalidateQueries({ queryKey: ["GET_PRODUCT_BY_ID"] });
@@ -102,6 +112,7 @@ export const useDeleteProduct = () => {
     mutationFn: async (id) => await deleteProductFromDB(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_ALL_PRODUCTS"] });
+      queryClient.invalidateQueries({ queryKey: ["GET_SHOP_PRODUCTS"] });
       queryClient.invalidateQueries({ queryKey: ["GET_FLASH_SALE_PRODUCTS"] });
       queryClient.invalidateQueries({ queryKey: ["GET_MY_PRODUCTS"] });
       toast.success("Product deleted successfully");
