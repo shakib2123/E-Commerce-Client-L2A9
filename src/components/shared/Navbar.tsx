@@ -22,6 +22,7 @@ import Image from "next/image";
 import NavbarDropdown from "./NavbarDropdown";
 import { protectedRoutes } from "@/constant/constant";
 import { FaCartShopping } from "react-icons/fa6";
+import { useGetCurrentUser } from "@/hooks/user.hook";
 
 export default function Navbar() {
   const router = useRouter();
@@ -29,7 +30,8 @@ export default function Navbar() {
   const pathname = usePathname();
 
   const { user, setIsLoading: userLoading } = useUser();
-
+  const { data: userInfo, isSuccess } = useGetCurrentUser();
+  console.log(userInfo);
   const handleLogout = () => {
     logout();
     userLoading(true);
@@ -79,12 +81,12 @@ export default function Navbar() {
             Home
           </Link>
 
-          {userRole === "vendor" && (
+          {userRole === "vendor" && isSuccess && (
             <Link
-              href="/shop"
+              href={`/shop/${userInfo?.data?.shop?.id}`}
               aria-current="page"
               className={
-                pathname === "/shop"
+                pathname === `/shop/${userInfo?.data?.shop?.id}`
                   ? "text-white border-b-2 font-medium border-white duration-100 transition-colors hover:text-gray-200/90"
                   : "text-gray-200 hover:text-gray-200/90"
               }
@@ -162,11 +164,18 @@ export default function Navbar() {
               </Button>
             </Link>
           </NavbarMenuItem>
-          {userRole === "vendor" && (
+          {userRole === "vendor" && isSuccess && (
             <NavbarMenuItem>
-              <Link href="/shop" className="w-full h-full">
+              <Link
+                href={`/shop/${userInfo?.data?.shop?.id}`}
+                className="w-full h-full"
+              >
                 <Button
-                  color={pathname === "/shop" ? "primary" : "default"}
+                  color={
+                    pathname === `/shop/${userInfo?.data?.shop?.id}`
+                      ? "primary"
+                      : "default"
+                  }
                   className="w-full h-full"
                 >
                   Shop

@@ -95,3 +95,7 @@ export const addToCart = (product: IProduct) => {
 
   saveCart(cart);
 };
+
+export const clearCart = () => {
+  localStorage.removeItem("click_mart_cart");
+};
