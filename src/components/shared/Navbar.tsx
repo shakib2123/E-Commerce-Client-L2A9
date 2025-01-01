@@ -117,11 +117,33 @@ export default function Navbar() {
           >
             Flash Sales
           </Link>
+          <Link
+            href="/contact"
+            aria-current="page"
+            className={
+              pathname === "/contact"
+                ? "text-white border-b-2 font-medium border-white duration-100 transition-colors hover:text-gray-200/90"
+                : "text-gray-200 hover:text-gray-200/90"
+            }
+          >
+            Contact Us
+          </Link>
+          <Link
+            href="/about"
+            aria-current="page"
+            className={
+              pathname === "/about"
+                ? "text-white border-b-2 font-medium border-white duration-100 transition-colors hover:text-gray-200/90"
+                : "text-gray-200 hover:text-gray-200/90"
+            }
+          >
+            About Us
+          </Link>
         </ul>
       </NavbarContent>
 
       <NavbarContent
-        className="hidden sm:flex basis-1/5 sm:basis-full"
+        className="hidden lg:flex basis-1/5 sm:basis-full"
         justify="end"
       >
         <NavbarItem className="hidden sm:flex gap-2">
@@ -143,7 +165,7 @@ export default function Navbar() {
       </NavbarContent>
 
       <NavbarContent
-        className="sm:hidden basis-1 pl-4 text-white"
+        className="lg:hidden basis-1 pl-4 text-white"
         justify="end"
       >
         <Link href={"/cart"} className="p-2 rounded-lg">
@@ -155,31 +177,30 @@ export default function Navbar() {
       <NavbarMenu className="bg-black/5 text-gray-900">
         <div className="mx-4 mt-2 flex flex-col gap-2">
           <NavbarMenuItem>
-            <Link href="/" className="w-full h-full">
-              <Button
-                color={pathname === "/" ? "primary" : "default"}
-                className="w-full h-full"
-              >
-                Home
-              </Button>
+            <Link
+              href="/"
+              aria-current="page"
+              className={`py-1 flex justify-center
+                ${pathname === "/" ? "text-primary font-medium" : "text-black"}
+              `}
+            >
+              <span>Home</span>
             </Link>
           </NavbarMenuItem>
           {userRole === "vendor" && isSuccess && (
             <NavbarMenuItem>
               <Link
                 href={`/shop/${userInfo?.data?.shop?.id}`}
-                className="w-full h-full"
+                className={`py-1 flex justify-center
+                ${
+                  pathname === `/shop/${userInfo?.data?.shop?.id}`
+                    ? "text-primary font-medium"
+                    : "text-black"
+                }
+              `}
               >
-                <Button
-                  color={
-                    pathname === `/shop/${userInfo?.data?.shop?.id}`
-                      ? "primary"
-                      : "default"
-                  }
-                  className="w-full h-full"
-                >
-                  Shop
-                </Button>
+                <span>Shop</span>
+                Shop
               </Link>
             </NavbarMenuItem>
           )}
@@ -187,29 +208,31 @@ export default function Navbar() {
           <NavbarMenuItem>
             <Link
               href="/all-products"
-              aria-current="page"
-              className="w-full h-full"
+              className={`py-1 flex justify-center
+                ${
+                  pathname === "/all-products"
+                    ? "text-primary font-medium"
+                    : "text-black"
+                }
+              `}
             >
-              <Button
-                color={pathname === "/all-products" ? "primary" : "default"}
-                className="w-full h-full"
-              >
-                All Products
-              </Button>
+              <span>All Products</span>
+              Shop
             </Link>
           </NavbarMenuItem>
           <NavbarMenuItem>
             <Link
               href="/flash-sales"
               aria-current="page"
-              className="w-full h-full"
+              className={`py-1 flex justify-center
+                ${
+                  pathname === "/flash-sales"
+                    ? "text-primary font-medium"
+                    : "text-black"
+                }
+              `}
             >
-              <Button
-                color={pathname === "/flash-sales" ? "primary" : "default"}
-                className="w-full h-full"
-              >
-                Flash Sales
-              </Button>
+              <span>Flash Sales</span>
             </Link>
           </NavbarMenuItem>
           {user && (
@@ -217,32 +240,65 @@ export default function Navbar() {
               <Link
                 href="/profile"
                 aria-current="page"
-                className="w-full h-full"
+                className={`py-1 flex justify-center
+                  ${
+                    pathname === "/profile"
+                      ? "text-primary font-medium"
+                      : "text-black"
+                  }
+                `}
               >
-                <Button
-                  color={pathname === "/profile" ? "primary" : "default"}
-                  className="w-full h-full"
-                >
-                  Profile
-                </Button>
+                <span>Profile</span>
               </Link>
             </NavbarMenuItem>
           )}
 
           {user && (
             <NavbarMenuItem>
-              <Link href={`${userRole}/dashboard`} className="w-full h-full">
-                <Button
-                  color={
-                    pathname === `${userRole}/dashboard` ? "primary" : "default"
+              <Link
+                href={`${userRole}/dashboard`}
+                className={`py-1 flex justify-center
+                  ${
+                    pathname === `${userRole}/dashboard`
+                      ? "text-primary font-medium"
+                      : "text-black"
                   }
-                  className="w-full h-full"
-                >
-                  Dashboard
-                </Button>
+                `}
+              >
+                <span>Dashboard</span>
               </Link>
             </NavbarMenuItem>
           )}
+
+          <NavbarMenuItem>
+            <Link
+              href="/contact"
+              className={`py-1 flex justify-center
+                  ${
+                    pathname === "/contact"
+                      ? "text-primary font-medium"
+                      : "text-black"
+                  }
+                `}
+            >
+              <span>Contact Us</span>
+            </Link>
+          </NavbarMenuItem>
+
+          <NavbarMenuItem>
+            <Link
+              href="/about"
+              className={`py-1 flex justify-center
+                  ${
+                    pathname === "/about"
+                      ? "text-primary font-medium"
+                      : "text-black"
+                  }
+                `}
+            >
+              <span>About Us</span>
+            </Link>
+          </NavbarMenuItem>
 
           {user ? (
             <NavbarMenuItem>
